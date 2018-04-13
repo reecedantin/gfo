@@ -20,7 +20,7 @@
   <link href="lib/animate/animate.min.css" rel="stylesheet">
 
   <!-- Main Stylesheet File -->
-  <link href="css/style3.css" rel="stylesheet">
+  <link href="css/style4.css" rel="stylesheet">
 
 
   <!-- JavaScript Libraries -->

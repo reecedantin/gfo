@@ -13,7 +13,7 @@
 
       <div class="row text-center title-space">
         <div class="col-md-12">
-          <h4>Manage <b>Atwood Street Garden</b></h4>
+          <h4>Add New Property</h4>
         </div> <!-- End Column --> 
       </div> <!-- End Row --> 
 
@@ -131,15 +131,11 @@
       </div> <!-- End Row -->
 
       <div class="row button-adjust">
-        <div class="col-md-4">
-          <button id="addCrop" name="addCrop" class="btn btn-success style-bkg" style="width: 100%;">&#x1f4be Save</button>
+        <div class="col-md-6">
+          <button i="addCrop" name="addCrop" class="btn btn-success style-bkg" style="width: 100%;">&#x2b Add Property</button>
         </div>
 
-        <div class="col-md-4">
-          <button id="addCrop" name="addCrop" class="btn btn-danger" style="width: 100%;">&#x2718 Delete</button>
-        </div>
-
-        <div class="col-md-4">
+        <div class="col-md-6">
           <button id="addCrop" name="addCrop" class="btn btn-secondary" style="width: 100%;">&#x2190 Cancel</button>
         </div>
       </div> <!-- End Row -->
