@@ -22,12 +22,11 @@
         <div class="col-md-12">
 
 
-          <div class="row manage-card text-center">
-            <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-4 offset-md-2">
 
               <form class="form-horizontal">
                 <fieldset>
-
 
                   <label class="col-md-12 control-label" for="propertyName">Property Name*</label>
                   <div class="col-md-12">
@@ -60,6 +59,9 @@
                   <div class="col-md-12">
                     <input id="type" name="type" type="text" placeholder="Type" class="form-control input-md" value="Garden" disabled>
                   </div> <br> 
+
+                </div> <!-- End Column -->
+                <div class="col-md-4">
 
 
                   <label class="col-md-12 control-label" for="public">Public*</label>
@@ -134,22 +136,23 @@
               </div> <!-- End Row -->
 
 
-              <div class="row button-adjust">
-                <div class="col-md-4">
+              <div class="row">
+                <div class="col-md-2 offset-md-3">
                   <button id="addCrop" name="addCrop" class="btn btn-success style-bkg" style="width: 100%;">&#x1f4be Save</button>
                 </div>
 
-                <div class="col-md-4">
-                  <button  name="addCrop" class="btn btn-danger" style="width: 100%;">&#x2718 Delete</button>
+                <div class="col-md-2">
+                  <button  name="addCrop" class="btn btn-danger" style="width: 100%;">&#x2718 Delete Property</button>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-2">
                   <a href="ownerDashboard.php"><button name="addCrop" class="btn btn-secondary" style="width: 100%;">&#x2190 Cancel</button></a>
                 </div>
               </div> <!-- End Row -->
 
             </fieldset>
           </form>
+          <br> <br>
 
         </div> <!-- End Outer Column -->
       </div> <!-- End Outer Row --> 

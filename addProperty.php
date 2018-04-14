@@ -23,8 +23,8 @@
           <form class="form-horizontal">
             <fieldset>
 
-              <div class="row manage-card text-center">
-                <div class="col-md-12">
+              <div class="row ">
+                <div class="col-md-4 offset-md-2">
 
                   <label class="col-md-12 control-label" for="propertyName">Property Name*</label>
                   <div class="col-md-12">
@@ -47,11 +47,14 @@
                     <input id="zip" name="zip" type="text" placeholder="Zip" class="form-control input-md" required="">
                   </div> <br> 
 
-
                   <label class="col-md-12 control-label" for="size">Size* (acres)</label>  
                   <div class="col-md-12">
                     <input id="size" name="size" type="text" placeholder="Size" class="form-control input-md" required="">
                   </div> <br> 
+
+
+                </div> <!-- End Column -->
+                <div class="col-md-4">
 
                   <label class="col-md-12 control-label" for="type">Type*</label>
                   <div class="col-md-12">
@@ -109,6 +112,7 @@
                   <button id="addCrop" name="addCrop" class="btn btn-secondary" style="width: 100%;">&#x2190 Cancel</button>
                 </div>
               </div> <!-- End Row -->
+              <br> <br> 
 
 
             </fieldset>
