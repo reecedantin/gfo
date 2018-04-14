@@ -151,7 +151,7 @@ if($_SESSION['user_type'] != "OWNER") {
                 </div>
               -->
               <div class="col-md-3">
-                <a href="ownerDashboard.php"><button class="btn btn-secondary" style="width: 100%;">&#x2190 Back</button></a>
+                <a href="ownerDashboard.php"><div class="btn btn-secondary" style="width: 100%;">&#x2190 Back</div></a>
               </div>
             </div> 
 

@@ -145,7 +145,7 @@
                 </div>
 
                 <div class="col-md-2">
-                  <a href="ownerDashboard.php"><button name="addCrop" class="btn btn-secondary" style="width: 100%;">&#x2190 Cancel</button></a>
+                  <a href="ownerDashboard.php"><div name="addCrop" class="btn btn-secondary" style="width: 100%;">&#x2190 Cancel</div></a>
                 </div>
               </div> <!-- End Row -->
 
