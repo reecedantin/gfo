@@ -77,7 +77,7 @@
               </thead>
             <tbody>
                 <?php
-                $result = mysqli_query($db, "SELECT * FROM Property;");
+                $result = mysqli_query($db, "SELECT * FROM Property WHERE ApprovedBy != 'NULL';");
                  while ($row = mysqli_fetch_array($result)) {?>
                      <tr>
                          <td data-toggle="modal" data-target="#propertyDetails" class="link-color"><?php echo $row['Name'];?></td>
