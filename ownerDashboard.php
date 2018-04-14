@@ -87,7 +87,6 @@
             </thead>
             <tbody>
                 <?php
-                session_start();
                 $result = mysqli_query($db, "SELECT * FROM Property WHERE Owner = '" . $_SESSION['login_user'] . "'");
                  while ($row = mysqli_fetch_array($result)) {?>
                      <tr>
