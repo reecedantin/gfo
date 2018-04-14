@@ -1,3 +1,37 @@
+<?php
+   include("config.php");
+   session_start();
+
+   if($_SERVER["REQUEST_METHOD"] == "POST") {
+      // username and password sent from form
+
+      $myusername = mysqli_real_escape_string($db,$_POST['username']);
+      $mypassword = mysqli_real_escape_string($db,$_POST['password']);
+
+      $sql = "SELECT * FROM User WHERE Username = '$myusername' and Password = '" . md5($mypassword) . "'";
+      $result = mysqli_query($db,$sql);
+      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      $active = $row['active'];
+
+      $count = mysqli_num_rows($result);
+
+      // If result matched $myusername and $mypassword, table row must be 1 row
+
+      if($count == 1) {
+         //session_register("myusername");
+         $_SESSION['login_user'] = $myusername;
+
+         header("Location: /ownerDashboard.php");
+      }else {
+         $error = "Your Login Name or Password is invalid";
+      }
+   }
+?>
+
+<?php include('session.php'); ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,7 +51,7 @@
 
        <div class="card">
         <div class="card-body">
-          <form class="form-horizontal">
+          <form class="form-horizontal" action='index.php' method='post'>
             <fieldset>
 
               <!-- Form Name -->
@@ -25,16 +59,16 @@
               <br>
 
               <!-- Text input-->
-              <div class="form-group">  
+              <div class="form-group">
                 <div class="col-md-12">
-                  <input id="emailid" name="emailid" type="text" placeholder="Email" class="form-control input-md" required="">
+                  <input id="username" name="username" type="text" placeholder="Email" class="form-control input-md" required="">
                 </div>
               </div>
 
               <!-- Password input-->
               <div class="form-group">
                 <div class="col-md-12">
-                  <input id="passwordinput" name="passwordinput" type="password" placeholder="Password" class="form-control input-md" required="">
+                  <input id="password" name="password" type="password" placeholder="Password" class="form-control input-md" required="">
                 </div>
               </div>
 
@@ -49,21 +83,21 @@
                <div class="row">
                 <!-- Registration Links -->
                 <div class="col-md-6">
-                  <a class="btn btn-success style-bkg" href="newOwnerReg.php">New Owner Registration</a> <br> 
+                  <a class="btn btn-success style-bkg" href="newOwnerReg.php">New Owner Registration</a> <br>
                 </div>
 
                 <!-- Registration Links -->
                 <div class="col-md-6">
-                  <a class="btn btn-success style-bkg" href="newVisitorReg.php">New Visitor Registration</a> <br> 
+                  <a class="btn btn-success style-bkg" href="newVisitorReg.php">New Visitor Registration</a> <br>
                 </div>
               </div> <!-- End Row -->
-            </div> <!-- End Column -->  
+            </div> <!-- End Column -->
 
           </fieldset> <!-- End Fieldset -->
         </form> <!-- End Form -->
 
 
-      </div> <!-- End Card Body --> 
+      </div> <!-- End Card Body -->
     </div> <!-- End Card -->
 
 
