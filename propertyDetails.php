@@ -10,7 +10,6 @@ if($_SESSION['user_type'] != "OWNER") {
 <?php include("config.php"); ?>
 
 <?php include("head.php"); ?>
-<?php include("propertyDetailsModal.php"); ?>
 
 <body>
 
