@@ -1,5 +1,6 @@
 <?php
    include("config.php");
+   session_start();
    if($_SERVER["REQUEST_METHOD"] == "POST") {
 
       $sql = "INSERT INTO User (Username, Email, Password, UserType) VALUES ('" . $_POST['username'] . "', '" . $_POST['email'] . "', '" . md5($_POST['password']) . "', 'VISITOR' )";
@@ -10,7 +11,7 @@
          $_SESSION['user_type'] = 'VISITOR';
          header("Location: visitorDashboard.php");
       } else {
-         $error = "There was an error creating the account";
+         echo "<script type='text/javascript'>alert('There was an error creating the account');</script>";
       }
    }
 ?>

@@ -31,7 +31,7 @@
              header("Location: index.php");
          }
       }else {
-         $error = "Your Login Name or Password is invalid";
+         echo "<script type='text/javascript'>alert('Incorrect username or password');</script>";
       }
    }
 ?>
@@ -66,7 +66,7 @@
               <!-- Text input-->
               <div class="form-group">
                 <div class="col-md-12">
-                  <input id="username" name="username" type="text" placeholder="Email" class="form-control input-md" required="">
+                  <input id="username" name="username" type="text" placeholder="Username" class="form-control input-md" required="">
                 </div>
               </div>
 
