@@ -3,6 +3,7 @@
 
 <?php include("head.php"); ?>
 <?php include("propertyDetailsModal.php"); ?>
+<?php include("config.php"); ?>
 
 <body>
 
@@ -16,7 +17,7 @@
           <h4>All Other Valid Properties</h4>
           <br>
         </div>
-      </div> <!-- End Row --> 
+      </div> <!-- End Row -->
 
       <div class ="row">
         <div class = "col-md-12">
@@ -44,157 +45,82 @@
                  <input class="btn btn-primary style-bkg" type="submit" value="Search Properties">
                </div>
 
-             </div> <!-- End Row --> 
+             </div> <!-- End Row -->
 
            </fieldset>
          </form>
 
        </div> <!-- End Column -->
-     </div> <!-- End Row --> 
+     </div> <!-- End Row -->
 
-     <br> 
+     <br>
 
      <div class ="row">
       <div class = "col-md-12">
 
-        <div class="property-table"> 
+        <div class="property-table">
           <table class="table table-striped table-sm">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Name &#9660</th>
-                <th scope="col">Address</th>
-                <th scope="col">City &#9660</th>
-                <th scope="col">Zip</th>
-                <th scope="col">Size</th>
-                <th scope="col">Type &#9660</th>
-                <th scope="col">Public</th>
-                <th scope="col">Commercial</th>
-                <th scope="col">ID</th>
-                <th scope="col">isValid</th>
-                <th scope="col">Visits &#9660</th>
-                <th scope="col">Rating &#9650</th>
-              </tr>
-            </thead>
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Street</th>
+                  <th scope="col">City</th>
+                  <th scope="col">Zip</th>
+                  <th scope="col">Size</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Public</th>
+                  <th scope="col">Commercial</th>
+                  <th scope="col">&nbsp ID</th>
+                  <th scope="col">Approved By</th>
+                  <th scope="col">Visits</th>
+                  <th scope="col">Rating</th>
+                </tr>
+              </thead>
             <tbody>
-               <tr>
-                <th scope="row" data-toggle="modal" data-target="#propertyDetails" class="link-color">Atwood Street Garden</td>
-                <td>Atwood Street SW</td>
-                <td>Atlanta</td>
-                <td>30308</td>
-                <td>1</td>
-                <td>Garden</td> 
-                <td>True</td>
-                <td>False</td>
-                <td>00400</td>
-                <td>True</td>
-                <td>3</td>
-                <td>4.7</td>
-              </tr>
-              <tr>
-                <th scope="row" data-toggle="modal" data-target="#propertyDetails" class="link-color">East Lake Urban Farm</td>
-                <td>2nd Avenue</td>
-                <td>Atlanta</td>
-                <td>30317</td>
-                <td>20</td>
-                <td>Farm</td>
-                <td>False</td>
-                <td>True</td>
-                <td>12345</td>
-                <td>False</td>
-                <td>0</td>
-                <td>N/A</td>
-              </tr>
-               <tr>
-                <th scope="row" data-toggle="modal" data-target="#propertyDetails" class="link-color">Atwood Street Garden</td>
-                <td>Atwood Street SW</td>
-                <td>Atlanta</td>
-                <td>30308</td>
-                <td>1</td>
-                <td>Garden</td>
-                <td>True</td>
-                <td>False</td>
-                <td>00400</td>
-                <td>True</td>
-                <td>3</td>
-                <td>4.7</td>
-              </tr>
-              <tr>
-                <th scope="row" data-toggle="modal" data-target="#propertyDetails" class="link-color">East Lake Urban Farm</td>
-                <td>2nd Avenue</td>
-                <td>Atlanta</td>
-                <td>30317</td>
-                <td>20</td>
-                <td>Farm</td>
-                <td>False</td>
-                <td>True</td>
-                <td>12345</td>
-                <td>False</td>
-                <td>0</td>
-                <td>N/A</td>
-              </tr>
-               <tr>
-                <th scope="row" data-toggle="modal" data-target="#propertyDetails" class="link-color">Atwood Street Garden</td>
-                <td>Atwood Street SW</td>
-                <td>Atlanta</td>
-                <td>30308</td>
-                <td>1</td>
-                <td>Garden</td>
-                <td>True</td>
-                <td>False</td>
-                <td>00400</td>
-                <td>True</td>
-                <td>3</td>
-                <td>4.7</td>
-              </tr>
-              <tr>
-                <th scope="row" data-toggle="modal" data-target="#propertyDetails" class="link-color">East Lake Urban Farm</td>
-                <td>2nd Avenue</td>
-                <td>Atlanta</td>
-                <td>30317</td>
-                <td>20</td>
-                <td>Farm</td>
-                <td>False</td>
-                <td>True</td>
-                <td>12345</td>
-                <td>False</td>
-                <td>0</td>
-                <td>N/A</td>
-              </tr>
-               <tr>
-                <th scope="row" data-toggle="modal" data-target="#propertyDetails" class="link-color">Atwood Street Garden</td>
-                <td>Atwood Street SW</td>
-                <td>Atlanta</td>
-                <td>30308</td>
-                <td>1</td>
-                <td>Garden</td>
-                <td>True</td>
-                <td>False</td>
-                <td>00400</td>
-                <td>True</td>
-                <td>3</td>
-                <td>4.7</td>
-              </tr>
-              <tr>
-                <th scope="row" data-toggle="modal" data-target="#propertyDetails" class="link-color">East Lake Urban Farm</td>
-                <td>2nd Avenue</td>
-                <td>Atlanta</td>
-                <td>30317</td>
-                <td>20</td>
-                <td>Farm</td>
-                <td>False</td>
-                <td>True</td>
-                <td>12345</td>
-                <td>False</td>
-                <td>0</td>
-                <td>N/A</td>
-              </tr>
+                <?php
+                $result = mysqli_query($db, "SELECT * FROM Property;");
+                 while ($row = mysqli_fetch_array($result)) {?>
+                     <tr>
+                         <td data-toggle="modal" data-target="#propertyDetails" class="link-color"><?php echo $row['Name'];?></td>
+                         <td><?php echo $row['Street'];?></td>
+                         <td><?php echo $row['City'];?></td>
+                         <td><?php echo $row['Zip'];?></td>
+                         <td><?php echo $row['Size'];?></td>
+                         <td><?php echo $row['PropertyType'];?></td>
+                         <td><?php if ($row['IsPublic'] == "0") {
+                                    echo "No";
+                                } else {
+                                    echo "Yes";
+                                } ?>
+                         </td>
+                         <td><?php if ($row['IsCommercial'] == "0") {
+                                    echo "No";
+                                } else {
+                                    echo "Yes";
+                                } ?>
+                         </td>
+                         <td><?php echo $row['ID'];?></td>
+                         <td><?php if ($row['ApprovedBy'] == "NULL") {
+                                    echo "Not Approved";
+                                } else {
+                                    echo $row['ApprovedBy'];
+                                } ?>
+                         </td>
+                         <td><?php
+                                    $visitsql = "SELECT COUNT(*),  AVG(Rating) FROM Visit WHERE PropertyID = '" . $row['ID'] . "'";
+                                    $visitresult = mysqli_query($db, $visitsql);
+                                    $visitrow = mysqli_fetch_array($visitresult);
+                                    echo $visitrow['COUNT(*)'];?></td>
+                         <td><?php echo $visitrow["AVG(Rating)"];?></td>
+                     </tr>
+                <?php  } ?>
             </tbody>
           </table>
         </div> <!-- End Property Table Wrapper -->
 
 
       </div> <!-- End Column -->
-    </div> <!-- End Row --> 
+    </div> <!-- End Row -->
 
 
   </div> <!-- End Container -->
