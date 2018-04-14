@@ -1,3 +1,4 @@
+<?php include("sessionMain.php"); ?>
 <?php
    include("config.php");
    session_start();
@@ -21,15 +22,12 @@
          //session_register("myusername");
          $_SESSION['login_user'] = $myusername;
 
-         header("Location: /ownerDashboard.php");
+         header("Location: ownerDashboard.php");
       }else {
          $error = "Your Login Name or Password is invalid";
       }
    }
 ?>
-
-<?php include('session.php'); ?>
-
 
 
 <!DOCTYPE html>

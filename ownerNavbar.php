@@ -14,12 +14,12 @@
           <li><a href="ownerDashboard.php">Your Properties</a></li>
           <li><a href="addProperty.php">Add Property</a></li>
           <li><a href="viewOtherProperties.php">Other Properties</a></li>
-          <li><a href="index.php">LogOut</a></li>
+          <li><a href="logout.php">LogOut</a></li>
 
         </ul>
       </nav><!-- #nav-menu-container -->
     </div>
   </header><!-- #header -->
 
-  <!-- Adjust for Navbar Space -->  
+  <!-- Adjust for Navbar Space -->
       <br> <br> <br> <br>
