@@ -1,4 +1,9 @@
 <?php include('session.php'); ?>
+<?php
+    if($_SESSION['user_type'] != "OWNER") {
+        header("Location: index.php");
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="en">

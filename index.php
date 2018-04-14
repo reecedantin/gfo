@@ -1,7 +1,6 @@
 <?php include("sessionMain.php"); ?>
 <?php
    include("config.php");
-   session_start();
 
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // username and password sent from form
@@ -12,7 +11,7 @@
       $sql = "SELECT * FROM User WHERE Username = '$myusername' and Password = '" . md5($mypassword) . "'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-      $active = $row['active'];
+      $usertype = $row['UserType'];
 
       $count = mysqli_num_rows($result);
 
@@ -21,8 +20,16 @@
       if($count == 1) {
          //session_register("myusername");
          $_SESSION['login_user'] = $myusername;
-
-         header("Location: ownerDashboard.php");
+         $_SESSION['user_type'] = $usertype;
+         if($usertype == "ADMIN") {
+             header("Location: adminDashboard.php");
+         } else if($usertype == "OWNER") {
+             header("Location: ownerDashboard.php");
+         } else if($usertype == "VISITOR") {
+             header("Location: visitorDashboard.php");
+         } else {
+             header("Location: index.php");
+         }
       }else {
          $error = "Your Login Name or Password is invalid";
       }

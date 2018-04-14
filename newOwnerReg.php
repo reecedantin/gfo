@@ -17,7 +17,7 @@
 
        <div class="card">
         <div class="card-body">
-          <form class="form-horizontal">
+          <form class="form-horizontal" action='createOwner.php' method='post'>
             <fieldset>
 
               <!-- Form Name -->
@@ -38,7 +38,7 @@
                   <input id="confirmpasswordinput" name="confirmpasswordinput" type="password" placeholder="Confirm Password" class="form-control input-md" required="">
                 </div>
 
-              </div> <!-- End Row --> 
+              </div> <!-- End Row -->
 
 
 
@@ -58,7 +58,7 @@
                 <div class="col-md-4">
                   <input id="streetAddressId" name="streetAddress" type="text" placeholder="Street Address" class="form-control input-md" required="">
                 </div>
-              </div> <!-- End Row--> 
+              </div> <!-- End Row-->
 
 
               <div class="row rowspace">
@@ -71,7 +71,7 @@
                 <div class="col-md-4">
                   <input id="AcresId" name="Acres" type="text" placeholder="Acres" class="form-control input-md" required="">
                 </div>
-              </div> <!-- End Row --> 
+              </div> <!-- End Row -->
 
               <div class="row rowspace">
                 <div class="col-md-4">
@@ -124,12 +124,7 @@
 
                <!-- Registration Links -->
                <div class="col-md-3">
-                <a class="btn btn-success style-bkg" href="newVisitorReg.php">New Visitor</a> <br> 
-              </div>
-
-              <!-- Registration Links -->
-              <div class="col-md-3">
-                <a class="btn btn-success style-bkg" href="index.php">Existing User</a> <br> 
+                <a class="btn btn-success style-bkg" href="index.php">Back</a> <br>
               </div>
 
 
@@ -146,7 +141,7 @@
        </form> <!-- End Form -->
 
 
-     </div> <!-- End Card Body --> 
+     </div> <!-- End Card Body -->
    </div> <!-- End Card -->
 
 
