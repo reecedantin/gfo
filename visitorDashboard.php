@@ -1,8 +1,13 @@
+<?php include('session.php'); ?>
+<?php
+    if($_SESSION['user_type'] != "VISITOR") {
+        header("Location: index.php");
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <?php include("head.php"); ?>
-<?php include("propertyDetailsModal.php"); ?>
 <?php include("config.php"); ?>
 
 <body>
@@ -14,7 +19,7 @@
 
       <div class="row text-center title-space">
         <div class="col-md-12">
-          <h4>Welcome <b>Reece</b></h4>
+          <h4>Welcome <b><?php echo($_SESSION['login_user']); ?></b></h4>
         </div>
       </div> <!-- End Row -->
 

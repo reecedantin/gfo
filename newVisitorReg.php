@@ -1,7 +1,37 @@
+<?php
+   include("config.php");
+   if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+      $sql = "INSERT INTO User (Username, Email, Password, UserType) VALUES ('" . $_POST['username'] . "', '" . $_POST['email'] . "', '" . md5($_POST['password']) . "', 'VISITOR' )";
+      $result = mysqli_query($db,$sql);
+
+      if($result == true) {
+         $_SESSION['login_user'] = $_POST['username'];
+         $_SESSION['user_type'] = 'VISITOR';
+         header("Location: visitorDashboard.php");
+      } else {
+         $error = "There was an error creating the account";
+      }
+   }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <?php include("head.php"); ?>
+
+<script>
+function validateForm() {
+    var x = document.forms["visitReg"]["password"].value;
+    var y = document.forms["visitReg"]["confirmpassword"].value;
+
+    if (x != y) {
+        alert("Passwords must match");
+        return false;
+    }
+}
+</script>
+
 
 <body>
 
@@ -17,7 +47,7 @@
 
        <div class="card">
         <div class="card-body">
-          <form class="form-horizontal">
+          <form name="visitReg" onsubmit="return validateForm()" class="form-horizontal" action='newVisitorReg.php' method='post'>
             <fieldset>
 
               <!-- Form Name -->
@@ -27,7 +57,7 @@
               <!-- Text input-->
               <div class="form-group">
                 <div class="col-md-12">
-                  <input id="emailid" name="emailid" type="text" placeholder="Email" class="form-control input-md" required="">
+                  <input id="email" name="email" type="text" placeholder="Email" class="form-control input-md" required="">
 
                 </div>
               </div>
@@ -35,7 +65,7 @@
               <!-- Text input-->
               <div class="form-group">
                 <div class="col-md-12">
-                  <input id="usernameID" name="usernameID" type="text" placeholder="Username" class="form-control input-md" required="">
+                  <input id="username" name="username" type="text" placeholder="Username" class="form-control input-md" required="">
 
                 </div>
               </div>
@@ -43,7 +73,7 @@
               <!-- Password input-->
               <div class="form-group">
                 <div class="col-md-12">
-                  <input id="passwordinput" name="passwordinput" type="password" placeholder="Password" class="form-control input-md" required="">
+                  <input id="password" name="password" type="password" placeholder="Password" class="form-control input-md" required="">
 
                 </div>
               </div>
@@ -51,7 +81,7 @@
               <!-- Password input-->
               <div class="form-group">
                 <div class="col-md-12">
-                  <input id="confirmpasswordinput" name="confirmpasswordinput" type="password" placeholder="Confirm Password" class="form-control input-md" required="">
+                  <input id="confirmpassword" name="confirmpassword" type="password" placeholder="Confirm Password" class="form-control input-md" required="">
 
                 </div>
               </div>
@@ -67,21 +97,21 @@
                <div class="row">
                 <!-- Registration Links -->
                 <div class="col-md-6">
-                  <a class="btn btn-success style-bkg" href="newOwnerReg.php">New Owner Registration</a> <br> 
+                  <a class="btn btn-success style-bkg" href="newOwnerReg.php">New Owner Registration</a> <br>
                 </div>
 
                 <!-- Registration Links -->
                 <div class="col-md-6">
-                  <a class="btn btn-success style-bkg" href="index.php">Existing Account Login</a> <br> 
+                  <a class="btn btn-success style-bkg" href="index.php">Existing Account Login</a> <br>
                 </div>
               </div> <!-- End Row -->
-            </div> <!-- End Column -->  
+            </div> <!-- End Column -->
 
           </fieldset> <!-- End Fieldset -->
         </form> <!-- End Form -->
 
 
-      </div> <!-- End Card Body --> 
+      </div> <!-- End Card Body -->
     </div> <!-- End Card -->
 
 
