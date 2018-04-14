@@ -112,8 +112,12 @@
                                     echo $row['ApprovedBy'];
                                 } ?>
                          </td>
-                         <td><?php echo $row['Visits'];?></td>
-                         <td><?php echo $row['Rating'];?></td>
+                         <td><?php
+                                    $visitsql = "SELECT COUNT(*),  AVG(Rating) FROM Visit WHERE PropertyID = '" . $row['ID'] . "'";
+                                    $visitresult = mysqli_query($db, $visitsql);
+                                    $visitrow = mysqli_fetch_array($visitresult);
+                                    echo $visitrow['COUNT(*)'];?></td>
+                         <td><?php echo $visitrow["AVG(Rating)"];?></td>
                      </tr>
                 <?php  } ?>
 
