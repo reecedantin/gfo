@@ -10,7 +10,6 @@ if($_SESSION['user_type'] != "OWNER") {
 <?php include("config.php"); ?>
 
 <?php include("head.php"); ?>
-<?php include("propertyDetailsModal.php"); ?>
 
 <body>
 
@@ -27,9 +26,9 @@ if($_SESSION['user_type'] != "OWNER") {
       </div> <!-- End Row -->
 
       <div class ="row">
-        <div class = "col-md-6 offset-md-3">
+        <div class = "col-md-4 offset-md-4">
 
-         <table class="table table-condensed">
+         <table class="table table-condensed table-sm table-striped">
           <thead>
 
           </thead>
@@ -96,15 +95,72 @@ if($_SESSION['user_type'] != "OWNER") {
             </tr>
           </tbody>
         </table>
-<br> 
-               <div class="col-md-4 offset-md-4">
-                  <a href="ownerDashboard.php"><button class="btn btn-secondary" style="width: 100%;">&#x2190 Back</button></a>
-                </div>
-<br> <br>
 
       </div> <!-- End Column -->
     </div> <!-- End Row -->
 
+
+    <div class ="row">
+      <div class="col-md-12"> 
+
+        <form class="form-horizontal">
+          <fieldset>
+
+            <div class ="row">
+              <div class = "col-md-4 offset-md-4">
+
+
+                <table class="table table-condensed table-sm">
+                  <thead>
+
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>Rate Visit</th>
+                      <td>
+
+                        <div class="col-md-12">
+                          <select id="selectbasic" name="selectbasic" class="form-control">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                          </select>
+                        </div>
+
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <br> <br>
+
+              </div> <!-- End Column -->
+            </div> <!-- End Row -->
+
+
+            <div class="row">
+             <div class="col-md-3 offset-md-3">
+              <a href="ownerDashboard.php"><button class="btn btn-success style-bkg" style="width: 100%;">&#x2605 Log Visit</button></a>
+            </div>
+
+  <!--   Uncomment and use this for the unlogging case
+             <div class="col-md-3 offset-md-3">
+                  <a href="ownerDashboard.php"><button class="btn btn-success style-bkg" style="width: 100%;">&#x2718 Un-Log Visit</button></a>
+                </div>
+              -->
+              <div class="col-md-3">
+                <a href="ownerDashboard.php"><button class="btn btn-secondary" style="width: 100%;">&#x2190 Back</button></a>
+              </div>
+            </div> 
+
+          </fieldset>
+        </form>
+      </div> <!-- End Column -->
+    </div> <!-- End Row -->
+
+    <br> <br> 
 
   </div> <!-- End Container -->
 </section>
