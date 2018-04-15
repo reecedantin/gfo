@@ -81,7 +81,7 @@
                 $result = mysqli_query($db, "SELECT * FROM Property;");
                  while ($row = mysqli_fetch_array($result)) {?>
                      <tr>
-                         <td data-toggle="modal" data-target="#propertyDetails" class="link-color"><?php echo $row['Name'];?></td>
+                         <td class="link-color"><a href=<?php echo "propertyDetails.php?id=" . $row['ID'];?>><?php echo $row['Name'];?></a></td>
                          <td><?php echo $row['Street'];?></td>
                          <td><?php echo $row['City'];?></td>
                          <td><?php echo $row['Zip'];?></td>

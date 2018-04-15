@@ -2,6 +2,21 @@
 <?php include("config.php"); ?>
 
 <?php
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+       // username and password sent from form
+
+       $sql = "INSERT INTO Visit (Username, PropertyID, Rating) VALUES ('" . $_SESSION['login_user'] . "', '" . $_POST['id']. "', '" . $_POST['rating'] . "')";
+       $result = mysqli_query($db,$sql);
+
+       if($result == true) {
+              echo "<script type='text/javascript'>if(!alert(\"Successfully logged visit\")) document.location = 'visitHistory.php';</script>";
+       } else {
+           echo "<script type='text/javascript'>alert('Error: Could not log visit');</script>";
+       }
+    }
+?>
+
+<?php
     $findpropertywithID = mysqli_query($db, "SELECT * FROM Property WHERE ID = '" . $_GET['id'] . "'");
     $foundproperty = mysqli_fetch_array($findpropertywithID);
 
@@ -134,7 +149,8 @@
       <div class="col-md-12">
 
     <?php if($_SESSION['user_type'] == 'VISITOR') { ?>
-        <form class="form-horizontal">
+        <form class="form-horizontal" action='propertyDetails.php' method='post'>
+          <input type="hidden" name="id" value=<?php echo "\"" . $foundproperty['ID'] . "\""; ?>>
           <fieldset>
 
             <div class ="row">
@@ -150,7 +166,7 @@
                       <td>
 
                         <div class="col-md-12">
-                          <select id="selectbasic" name="selectbasic" class="form-control">
+                          <select id="rating" name="rating" class="form-control">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
