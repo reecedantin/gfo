@@ -139,12 +139,12 @@ if($_SESSION['user_type'] != "OWNER") {
     <div class ="row">
       <div class="col-md-12">
 
+    <?php if($_SESSION['user_type'] == 'VISITOR') { ?>
         <form class="form-horizontal">
           <fieldset>
 
             <div class ="row">
               <div class = "col-md-4 offset-md-4">
-
 
                 <table class="table table-condensed table-sm">
                   <thead>
@@ -178,21 +178,28 @@ if($_SESSION['user_type'] != "OWNER") {
 
             <div class="row">
              <div class="col-md-3 offset-md-3">
-              <a href="ownerDashboard.php"><button class="btn btn-success style-bkg" style="width: 100%;">&#x2605 Log Visit</button></a>
+              <a href="ownerDashboard.php"><button class="btn btn-success style-bkg" style="width: 100%;"> Log Visit</button></a>
             </div>
 
-  <!--   Uncomment and use this for the unlogging case
+            <!--   Uncomment and use this for the unlogging case
              <div class="col-md-3 offset-md-3">
                   <a href="ownerDashboard.php"><button class="btn btn-success style-bkg" style="width: 100%;">&#x2718 Un-Log Visit</button></a>
                 </div>
               -->
               <div class="col-md-3">
-                <a href="ownerDashboard.php"><div class="btn btn-secondary" style="width: 100%;">&#x2190 Back</div></a>
+                <a href="index.php"><div class="btn btn-secondary" style="width: 100%;">Back</div></a>
               </div>
             </div>
 
           </fieldset>
         </form>
+    <?php } else { ?>
+        <div class="row">
+            <div class="col-md-3">
+              <a href="index.php"><div class="btn btn-secondary" style="width: 100%;">Back</div></a>
+            </div>
+        </div>
+    <?php } ?>
       </div> <!-- End Column -->
     </div> <!-- End Row -->
 
