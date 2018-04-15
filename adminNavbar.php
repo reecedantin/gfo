@@ -17,7 +17,7 @@
           <li><a href="ownerList.php">Owner List</a></li>
           <li><a href="approvedEntities.php">Approved Entities</a></li>
           <li><a href="pendingEntities.php">Pending Entities</a></li>
-          <li><a href="logout.php">LogOut</a></li>
+          <li><a href="logout.php">Logout</a></li>
 
         </ul>
       </nav><!-- #nav-menu-container -->

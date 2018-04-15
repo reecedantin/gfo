@@ -559,7 +559,7 @@ table-layout: fixed;
 .property-table tbody{
   overflow-y: scroll;      
   height: 310px;            
-  width: 98%;
+  width: 100%;
   position: absolute;
 }
 

@@ -28,7 +28,7 @@
       <div class ="row">
         <div class = "col-md-12">
 
-          <h6>Confirmed Properties</h6>
+          <h6>Unconfirmed Properties</h6>
           <form class="form-horizontal">
             <fieldset>
 
