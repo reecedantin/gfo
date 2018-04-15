@@ -4,14 +4,24 @@
 <?php
     if($_SERVER["REQUEST_METHOD"] == "POST") {
        // username and password sent from form
+       if(!isset($_POST['date'])) {
+           $sql = "INSERT INTO Visit (Username, PropertyID, Rating) VALUES ('" . $_SESSION['login_user'] . "', '" . $_POST['id']. "', '" . $_POST['rating'] . "')";
+           $result = mysqli_query($db,$sql);
 
-       $sql = "INSERT INTO Visit (Username, PropertyID, Rating) VALUES ('" . $_SESSION['login_user'] . "', '" . $_POST['id']. "', '" . $_POST['rating'] . "')";
-       $result = mysqli_query($db,$sql);
-
-       if($result == true) {
-              echo "<script type='text/javascript'>if(!alert(\"Successfully logged visit\")) document.location = 'visitHistory.php';</script>";
+           if($result == true) {
+                  echo "<script type='text/javascript'>if(!alert(\"Successfully logged visit\")) document.location = 'visitHistory.php';</script>";
+           } else {
+               echo "<script type='text/javascript'>if(!alert(\"Error: Could not log visit\")) document.location = 'visitHistory.php';</script>";
+           }
        } else {
-           echo "<script type='text/javascript'>alert('Error: Could not log visit');</script>";
+           $sql = "DELETE FROM `Visit` WHERE Username = '" . $_SESSION['login_user'] . "' AND PropertyID = '" . $_POST['id']. "'";
+           $result = mysqli_query($db,$sql);
+
+           if($result == true) {
+                  echo "<script type='text/javascript'>if(!alert(\"Successfully un-logged visit\")) document.location = 'visitHistory.php';</script>";
+           } else {
+               echo "<script type='text/javascript'>alert('Error: Could not un-log visit');</script>";
+           }
        }
     }
 ?>
@@ -148,7 +158,7 @@
     <div class ="row">
       <div class="col-md-12">
 
-    <?php if($_SESSION['user_type'] == 'VISITOR') { ?>
+    <?php if($_SESSION['user_type'] == 'VISITOR' && !isset($_GET['date'])) { ?>
         <form class="form-horizontal" action='propertyDetails.php' method='post'>
           <input type="hidden" name="id" value=<?php echo "\"" . $foundproperty['ID'] . "\""; ?>>
           <fieldset>
@@ -188,7 +198,7 @@
 
             <div class="row">
              <div class="col-md-3 offset-md-3">
-              <a href="ownerDashboard.php"><button class="btn btn-success style-bkg" style="width: 100%;"> Log Visit</button></a>
+              <a><button class="btn btn-success style-bkg" style="width: 100%;"> Log Visit</button></a>
             </div>
 
             <!--   Uncomment and use this for the unlogging case
@@ -203,6 +213,20 @@
 
           </fieldset>
         </form>
+    <?php } else if($_SESSION['user_type'] == 'VISITOR' && isset($_GET['date'])) { ?>
+        <form class="form-horizontal" action='propertyDetails.php' method='post'>
+            <input type="hidden" name="id" value=<?php echo "\"" . $foundproperty['ID'] . "\""; ?>>
+            <input type="hidden" name="date" value=<?php echo "\"" . $_GET['date'] . "\""; ?>>
+            <div class="row">
+            <div class="col-md-3 offset-md-3">
+                 <a><button class="btn btn-success style-bkg" style="width: 100%;">&#x2718 Un-Log Visit</button></a>
+             </div>
+
+           <div class="col-md-3">
+             <a href="visitHistory.php"><div class="btn btn-secondary" style="width: 100%;">Back</div></a>
+           </div>
+           </div>
+       </form>
     <?php } else { ?>
         <div class="row">
             <div class="col-md-3">

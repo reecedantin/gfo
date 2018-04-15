@@ -34,11 +34,15 @@
                 </tr>
               </thead>
               <tbody>
-               <tr>
-                 <td data-toggle="modal" data-target="#propertyDetails" class="link-color">Georgia Tech Garden</td>
-                 <td>2018-01-21</td>
-                 <td>5</td>
-               </tr>
+              <?php
+                 $result = mysqli_query($db, "SELECT * FROM Visit INNER JOIN Property ON Visit.PropertyID = Property.ID WHERE Username = '" . $_SESSION['login_user'] . "'");
+                 while ($row = mysqli_fetch_array($result)) {?>
+                   <tr>
+                     <td class="link-color"><a href=<?php echo "propertyDetails.php?id=" . $row['PropertyID'] . "&date=" . $row["VisitDate"];?>><?php echo $row['Name'];?></a></td>
+                     <td><?php echo $row['VisitDate'];?></td>
+                     <td><?php echo $row['Rating'];?></td>
+                   </tr>
+               <?php } ?>
              </tbody>
            </table>
          </div> <!-- End Property Table Wrapper -->
