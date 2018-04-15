@@ -30,7 +30,7 @@
          } else {
              header("Location: index.php");
          }
-      }else {
+      } else {
          echo "<script type='text/javascript'>alert('Incorrect username or password');</script>";
       }
    }
