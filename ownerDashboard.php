@@ -90,7 +90,7 @@
                  while ($row = mysqli_fetch_array($result)) {?>
                      <tr>
                          <th scope="row"><a href="manageProperty.php">Edit</a></th>
-                         <td class="link-color"><a href="propertyDetails.php"><?php echo $row['Name'];?></a></td>
+                         <td class="link-color"><a href=<?php echo "propertyDetails.php?id=" . $row['ID'];?>><?php echo $row['Name'];?></a></td>
                          <td><?php echo $row['Street'];?></td>
                          <td><?php echo $row['City'];?></td>
                          <td><?php echo $row['Zip'];?></td>
