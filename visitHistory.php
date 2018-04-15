@@ -1,3 +1,4 @@
+<?php include("session.php") ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +7,7 @@
 
 <body>
 
-  <?php include("visitorNavbar.php"); ?>
+  <?php include("navbar.php"); ?>
 
   <section>
     <div class="container">

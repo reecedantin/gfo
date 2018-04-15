@@ -35,7 +35,7 @@ if($_SESSION['user_type'] != "OWNER") {
 
 <body>
 
-  <?php include("ownerNavbar.php"); ?>
+  <?php include("navbar.php"); ?>
 
   <section>
     <div class="container">

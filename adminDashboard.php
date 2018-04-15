@@ -13,7 +13,7 @@
 
 <body>
 
-  <?php include("adminNavbar.php"); ?>
+  <?php include("navbar.php"); ?>
 
   <section>
     <div class="container">

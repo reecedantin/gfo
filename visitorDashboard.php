@@ -12,7 +12,7 @@
 
 <body>
 
-  <?php include("visitorNavbar.php"); ?>
+  <?php include("navbar.php"); ?>
 
   <section>
     <div class="container">

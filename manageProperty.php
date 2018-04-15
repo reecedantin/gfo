@@ -5,7 +5,7 @@
 
 <body>
 
-  <?php include("ownerNavbar.php"); ?>
+  <?php include("navbar.php"); ?>
 
   <section>
     <div class="container">
@@ -13,8 +13,8 @@
       <div class="row text-center title-space">
         <div class="col-md-12">
           <h4>Manage <b>Atwood Street Garden</b></h4>
-        </div> <!-- End Column --> 
-      </div> <!-- End Row --> 
+        </div> <!-- End Column -->
+      </div> <!-- End Row -->
 
 
       <div class="row">
@@ -30,34 +30,34 @@
                   <label class="col-md-12 control-label" for="propertyName">Property Name*</label>
                   <div class="col-md-12">
                     <input id="propertyName" name="propertyName" type="text" placeholder="Property Name" class="form-control input-md" required="">
-                  </div> <br> 
+                  </div> <br>
 
-                  <label class="col-md-12 control-label" for="address">Address*</label>  
+                  <label class="col-md-12 control-label" for="address">Address*</label>
                   <div class="col-md-12">
                     <input id="address" name="address" type="text" placeholder="Address" class="form-control input-md" required="">
-                  </div> <br> 
+                  </div> <br>
 
-                  <label class="col-md-12 control-label" for="city">City*</label>  
+                  <label class="col-md-12 control-label" for="city">City*</label>
                   <div class="col-md-12">
                     <input id="city" name="city" type="text" placeholder="City" class="form-control input-md" required="">
-                  </div> <br> 
+                  </div> <br>
 
 
-                  <label class="col-md-12 control-label" for="zip">Zip*</label>  
+                  <label class="col-md-12 control-label" for="zip">Zip*</label>
                   <div class="col-md-12">
                     <input id="zip" name="zip" type="text" placeholder="Zip" class="form-control input-md" required="">
-                  </div> <br> 
+                  </div> <br>
 
 
-                  <label class="col-md-12 control-label" for="size">Size* (acres)</label>  
+                  <label class="col-md-12 control-label" for="size">Size* (acres)</label>
                   <div class="col-md-12">
                     <input id="size" name="size" type="text" placeholder="Size" class="form-control input-md" required="">
-                  </div> <br> 
+                  </div> <br>
 
-                  <label class="col-md-12 control-label" for="type">Type*</label>  
+                  <label class="col-md-12 control-label" for="type">Type*</label>
                   <div class="col-md-12">
                     <input id="type" name="type" type="text" placeholder="Type" class="form-control input-md" value="Garden" disabled>
-                  </div> <br> 
+                  </div> <br>
 
                 </div> <!-- End Column -->
                 <div class="col-md-4">
@@ -69,7 +69,7 @@
                       <option value="1">True</option>
                       <option value="2">Flase</option>
                     </select>
-                  </div> <br> 
+                  </div> <br>
 
                   <label class="col-md-12 control-label" for="public">Commercial*</label>
                   <div class="col-md-12">
@@ -77,12 +77,12 @@
                       <option value="1">True</option>
                       <option value="2">Flase</option>
                     </select>
-                  </div> <br> 
+                  </div> <br>
 
-                  <label class="col-md-12 control-label" for="type">ID</label>  
+                  <label class="col-md-12 control-label" for="type">ID</label>
                   <div class="col-md-12">
                     <input id="type" name="type" type="text" placeholder="Type" class="form-control input-md" value="00122" disabled>
-                  </div> <br> 
+                  </div> <br>
 
                   <!-- Multiple Checkboxes -->
                   <div class="form-group">
@@ -111,7 +111,7 @@
                         <option value="1">Coffee</option>
                         <option value="2">Spinach</option>
                       </select>
-                    </div> 
+                    </div>
                     <div class="col-md-12">
                       <button id="addCrop" name="addCrop" class="btn btn-primary style-bkg" style="width: 100%;">Add Crop to Property</button>
                     </div>
@@ -154,7 +154,7 @@
           <br> <br>
 
         </div> <!-- End Outer Column -->
-      </div> <!-- End Outer Row --> 
+      </div> <!-- End Outer Row -->
 
     </div> <!-- End Container -->
   </section>
