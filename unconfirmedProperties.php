@@ -1,6 +1,6 @@
 <?php include('session.php'); ?>
 <?php
-    if($_SESSION['user_type'] != "OWNER") {
+    if($_SESSION['user_type'] != "ADMIN") {
         header("Location: index.php");
     }
 ?>

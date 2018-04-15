@@ -1,6 +1,6 @@
 <?php include('session.php'); ?>
 <?php
-if($_SESSION['user_type'] != "OWNER") {
+if($_SESSION['user_type'] != "ADMIN") {
   header("Location: index.php");
 }
 ?>
@@ -13,7 +13,7 @@ if($_SESSION['user_type'] != "OWNER") {
 
 <body>
 
-  <?php include("adminNavbar.php"); ?>
+  <?php include("navbar.php"); ?>
 
   <section>
     <div class="container">
@@ -44,10 +44,10 @@ if($_SESSION['user_type'] != "OWNER") {
                 </div>
               </div> <!-- End form group -->
 
-            </fieldset> 
+            </fieldset>
           </form>
 
-        </div> <!-- End Column --> 
+        </div> <!-- End Column -->
       </div> <!-- End Row -->  <br>
 
 
@@ -104,62 +104,62 @@ if($_SESSION['user_type'] != "OWNER") {
                <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Apple</td>
-                <td>Fruit</td>                   
+                <td>Fruit</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Antelope</td>
-                <td>Animal</td>                   
+                <td>Animal</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Apple</td>
-                <td>Fruit</td>                   
+                <td>Fruit</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Antelope</td>
-                <td>Animal</td>                   
+                <td>Animal</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Apple</td>
-                <td>Fruit</td>                   
+                <td>Fruit</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Antelope</td>
-                <td>Animal</td>                   
+                <td>Animal</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Apple</td>
-                <td>Fruit</td>                   
+                <td>Fruit</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Antelope</td>
-                <td>Animal</td>                   
+                <td>Animal</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Apple</td>
-                <td>Fruit</td>                   
+                <td>Fruit</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Antelope</td>
-                <td>Animal</td>                   
+                <td>Animal</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Apple</td>
-                <td>Fruit</td>                   
+                <td>Fruit</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Antelope</td>
-                <td>Animal</td>                   
+                <td>Animal</td>
               </tr>
             </tbody>
           </table>

@@ -1,6 +1,6 @@
 <?php include('session.php'); ?>
 <?php
-if($_SESSION['user_type'] != "OWNER") {
+if($_SESSION['user_type'] != "ADMIN") {
   header("Location: index.php");
 }
 ?>
@@ -13,7 +13,7 @@ if($_SESSION['user_type'] != "OWNER") {
 
 <body>
 
-  <?php include("adminNavbar.php"); ?>
+  <?php include("navbar.php"); ?>
 
   <section>
     <div class="container">
@@ -81,14 +81,14 @@ if($_SESSION['user_type'] != "OWNER") {
                 <td class="link-color"><a>Delete</a></td>
                 <td>Kdog99</td>
                 <td>Kdog99@Gmail.com</td>
-                <td>69</td>                   
+                <td>69</td>
               </tr>
               <tr>
                 <td class="link-color"><a>Delete</a></td>
                 <td class="link-color"><a>Delete</a></td>
                 <td>Kdog99</td>
                 <td>Kdog99@Gmail.com</td>
-                <td>69</td>                   
+                <td>69</td>
               </tr>
 
               <tr>
@@ -96,8 +96,8 @@ if($_SESSION['user_type'] != "OWNER") {
                 <td class="link-color"><a>Delete</a></td>
                 <td>Kdog99</td>
                 <td>Kdog99@Gmail.com</td>
-                <td>69</td>                   
-              </tr>           
+                <td>69</td>
+              </tr>
 
             </tbody>
           </table>

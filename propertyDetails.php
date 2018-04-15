@@ -2,12 +2,6 @@
 <?php include("config.php"); ?>
 
 <?php
-if($_SESSION['user_type'] != "OWNER") {
-  header("Location: index.php");
-}
-?>
-
-<?php
     $findpropertywithID = mysqli_query($db, "SELECT * FROM Property WHERE ID = '" . $_GET['id'] . "'");
     $foundproperty = mysqli_fetch_array($findpropertywithID);
 
