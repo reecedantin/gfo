@@ -71,29 +71,24 @@ if($_SESSION['user_type'] != "ADMIN") {
                   <th scope="col">Delete Owner</th>
                   <th scope="col">Username</th>
                   <th scope="col">Email</th>
-                  <th scope="col">Logged Visits</th>
+                  <th scope="col">Number of properties</th>
                 </tr>
               </thead>
               <tbody>
-               <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Kdog99</td>
-                <td>Kdog99@Gmail.com</td>
-                <td>69</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Kdog99</td>
-                <td>Kdog99@Gmail.com</td>
-                <td>69</td>
-              </tr>
-
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Kdog99</td>
-                <td>Kdog99@Gmail.com</td>
-                <td>69</td>
-              </tr>
+              <?php
+              $result = mysqli_query($db, "SELECT * FROM User WHERE UserType = 'VISITOR';");
+               while ($row = mysqli_fetch_array($result)) {?>
+                   <tr>
+                       <td class="link-color">Delete</td>
+                       <td><?php echo $row['Username'];?></td>
+                       <td><?php echo $row['Email'];?></td>
+                       <td><?php
+                                  $visitsql = "SELECT COUNT(*) FROM Property WHERE Username = '" . $row['Username'] . "'";
+                                  $visitresult = mysqli_query($db, $visitsql);
+                                  $visitrow = mysqli_fetch_array($visitresult);
+                                  echo $visitrow['COUNT(*)'];?></td>
+                   </tr>
+              <?php  } ?>
 
             </tbody>
           </table>
