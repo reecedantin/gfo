@@ -33,14 +33,14 @@ if($_SESSION['user_type'] != "ADMIN") {
             <fieldset>
 
               <div class="form-group">
-                <label class="col-md-12 control-label" for="addCrop">Request Crop Approval</label>
+                <label class="col-md-12 control-label" for="addCrop">Add New Crop</label>
 
                 <div class="col-md-12 rowspace">
                   <input id="cropRequest" name="cropRequest" type="text" placeholder="Enter New Crop Name" class="form-control input-md">
                 </div>
 
                 <div class="col-md-12">
-                  <button id="addCrop" name="addCrop" class="btn btn-primary style-bkg" style="width: 100%;">Submit Request</button>
+                  <button id="addCrop" name="addCrop" class="btn btn-primary style-bkg" style="width: 100%;">Add to Approved List</button>
                 </div>
               </div> <!-- End form group -->
 

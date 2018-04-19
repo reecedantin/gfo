@@ -92,15 +92,15 @@
                          <td><?php echo $row['Size'];?></td>
                          <td><?php echo $row['PropertyType'];?></td>
                          <td><?php if ($row['IsPublic'] == "0") {
-                                    echo "No";
+                                    echo "False";
                                 } else {
-                                    echo "Yes";
+                                    echo "True";
                                 } ?>
                          </td>
                          <td><?php if ($row['IsCommercial'] == "0") {
-                                    echo "No";
+                                    echo "False";
                                 } else {
-                                    echo "Yes";
+                                    echo "True";
                                 } ?>
                          </td>
                          <td><?php echo $row['ID'];?></td>

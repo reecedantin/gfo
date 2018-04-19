@@ -9,7 +9,7 @@
            $result = mysqli_query($db,$sql);
 
            if($result == true) {
-                  echo "<script type='text/javascript'>if(!alert(\"Successfully logged visit\")) document.location = 'visitHistory.php';</script>";
+               echo "<script type='text/javascript'>if(!alert(\"Successfully logged visit\")) document.location = 'visitHistory.php';</script>";
            } else {
                echo "<script type='text/javascript'>if(!alert(\"Error: Could not log visit\")) document.location = 'visitHistory.php';</script>";
            }
@@ -41,6 +41,10 @@
         $cropsresult = mysqli_query($db, "SELECT * FROM Has WHERE PropertyID = '" . $foundproperty['ID'] . "' AND ItemName NOT IN (SELECT Name FROM FarmItem WHERE Type = 'ANIMAL')");
         $animalresult = mysqli_query($db, "SELECT * FROM Has WHERE PropertyID = '" . $foundproperty['ID'] . "' AND ItemName IN (SELECT Name FROM FarmItem WHERE Type = 'ANIMAL')");
 
+        if($_SESSION['user_type'] == "VISITOR") {
+            $userhasvisitresult = mysqli_query($db, "SELECT * FROM Visit WHERE Username = '" . $_SESSION['login_user'] . "' AND PropertyID = '" . $foundproperty['ID']. "'");
+            $userhasvisited = (mysqli_num_rows($userhasvisitresult) == 1);
+        }
     } else {
        echo "<script type='text/javascript'>if(!alert(\"Could not find property\")) document.location = 'index.php';</script>";
     }
@@ -158,7 +162,7 @@
     <div class ="row">
       <div class="col-md-12">
 
-    <?php if($_SESSION['user_type'] == 'VISITOR' && !isset($_GET['date'])) { ?>
+    <?php if(!$userhasvisited && $_SESSION['user_type'] == 'VISITOR') { ?>
         <form class="form-horizontal" action='propertyDetails.php' method='post'>
           <input type="hidden" name="id" value=<?php echo "\"" . $foundproperty['ID'] . "\""; ?>>
           <fieldset>
@@ -213,7 +217,7 @@
 
           </fieldset>
         </form>
-    <?php } else if($_SESSION['user_type'] == 'VISITOR' && isset($_GET['date'])) { ?>
+    <?php } else if($userhasvisited && $_SESSION['user_type'] == 'VISITOR') { ?>
         <form class="form-horizontal" action='propertyDetails.php' method='post'>
             <input type="hidden" name="id" value=<?php echo "\"" . $foundproperty['ID'] . "\""; ?>>
             <input type="hidden" name="date" value=<?php echo "\"" . $_GET['date'] . "\""; ?>>
