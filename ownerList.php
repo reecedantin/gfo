@@ -76,14 +76,14 @@ if($_SESSION['user_type'] != "ADMIN") {
               </thead>
               <tbody>
               <?php
-              $result = mysqli_query($db, "SELECT * FROM User WHERE UserType = 'VISITOR';");
+              $result = mysqli_query($db, "SELECT * FROM User WHERE UserType = 'OWNER';");
                while ($row = mysqli_fetch_array($result)) {?>
                    <tr>
                        <td class="link-color">Delete</td>
                        <td><?php echo $row['Username'];?></td>
                        <td><?php echo $row['Email'];?></td>
                        <td><?php
-                                  $visitsql = "SELECT COUNT(*) FROM Property WHERE Username = '" . $row['Username'] . "'";
+                                  $visitsql = "SELECT COUNT(*) FROM Property WHERE Owner = '" . $row['Username'] . "'";
                                   $visitresult = mysqli_query($db, $visitsql);
                                   $visitrow = mysqli_fetch_array($visitresult);
                                   echo $visitrow['COUNT(*)'];?></td>
