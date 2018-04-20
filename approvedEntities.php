@@ -61,13 +61,13 @@ if($_SESSION['user_type'] != "ADMIN") {
       <div class="row">
         <div class="col-md-6 offset-md-3">
 
-          <form class="form-horizontal" method="post">
+          <form class="form-horizontal" id="addItemForm" method="post">
               <div class="form-group">
-                <label class="col-md-12 control-label" for="addCrop"><b>Add New Crop</b></label>
+                <label class="col-md-12 control-label"><b>Add New Item</b></label>
 
                  <label class="col-md-12 control-label" for="type">Type*</label>
                   <div class="col-md-12 rowspace">
-                    <select id="addType" name="addType" class="form-control" onChange="FarmTypeChanged()">
+                    <select id="addType" name="addType" class="form-control">
                         <option value=""></option>
                         <?php foreach ($farmItemList as &$value) {  ?>
                             <option value="<?php echo $value ?>"><?php echo $value ?></option>
@@ -80,11 +80,9 @@ if($_SESSION['user_type'] != "ADMIN") {
                 </div>
 
                 <div class="col-md-12">
-                  <button id="addCrop" class="btn btn-primary style-bkg" style="width: 100%;">Add to Approved List</button>
+                  <button id="addItem" type="button" onclick="AddItem()" class="btn btn-primary style-bkg" style="width: 100%;">Add to Approved List</button>
                 </div>
               </div> <!-- End form group -->
-
-            </fieldset>
           </form>
 
         </div> <!-- End Column -->
@@ -159,6 +157,22 @@ if($_SESSION['user_type'] != "ADMIN") {
 
   </div> <!-- End Container -->
 </section>
+<script>
+    function AddItem () {
+        var typeSelect = document.getElementById("addType");
+        var nameText = document.getElementById("addName");
+        if(typeSelect.options[typeSelect.selectedIndex].text == "") {
+            alert("Error: Please select a type");
+            return;
+        }
 
+        if(nameText.value == "") {
+            alert("Error: Please input a name");
+            return;
+        }
+
+        document.getElementById("addItemForm").submit();
+    }
+</script>
 </body>
 </html>
