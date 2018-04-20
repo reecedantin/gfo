@@ -1,13 +1,36 @@
 <?php include('session.php'); ?>
+<?php include('config.php'); ?>
 <?php
 if($_SESSION['user_type'] != "ADMIN") {
   header("Location: index.php");
 }
 ?>
 
+<?php
+    if(isset($_GET['deleteName'])) {
+        $sql = "DELETE FROM FarmItem WHERE Name = '" . $_GET['deleteName'] . "'";
+        $result = mysqli_query($db,$sql);
+        if($result == true) {
+            echo "<script type='text/javascript'>if(!alert(\"Successfully deleted: " . $_GET['deleteName'] . "\")) document.location = 'pendingEntities.php';</script>";
+        } else {
+            echo "<script type='text/javascript'>if(!alert(\"Error: Could not delete: " . $_GET['deleteName'] . "\")) document.location = 'pendingEntities.php';</script>";
+        }
+    } else if(isset($_GET['approveName'])) {
+        $sql = "UPDATE FarmItem SET IsApproved = '1' WHERE Name = '" . $_GET['approveName'] . "'";
+        $result = mysqli_query($db,$sql);
+        if($result == true) {
+            echo "<script type='text/javascript'>if(!alert(\"Successfully approved: " . $_GET['approveName'] . "\")) document.location = 'pendingEntities.php';</script>";
+        } else {
+            echo "<script type='text/javascript'>if(!alert(\"Error: Could not approve: " . $_GET['approveName'] . "\")) document.location = 'pendingEntities.php';</script>";
+        }
+    }
+
+    $unapprovedItemsql = "SELECT * FROM FarmItem WHERE IsApproved = '0'";
+    $unapprovedItems = mysqli_query($db, $unapprovedItemsql);
+ ?>
+
 <!DOCTYPE html>
 <html lang="en">
-<?php include("config.php"); ?>
 
 <?php include("head.php"); ?>
 
@@ -75,32 +98,14 @@ if($_SESSION['user_type'] != "ADMIN") {
                 </tr>
               </thead>
               <tbody>
-
-               <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td class="link-color"><a>Approve</a></td>
-                <td>Apple</td>
-                <td>Fruit</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td class="link-color"><a>Approve</a></td>
-                <td>Antelope</td>
-                <td>Animal</td>
-              </tr>
-               <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td class="link-color"><a>Approve</a></td>
-                <td>Apple</td>
-                <td>Fruit</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td class="link-color"><a>Approve</a></td>
-                <td>Antelope</td>
-                <td>Animal</td>
-              </tr>
-
+                  <?php while ($row = mysqli_fetch_array($unapprovedItems)) { ?>
+                  <tr>
+                    <td class="link-color"><a href=<?php echo "pendingEntities.php?deleteName=" . $row['Name'];?>>Delete</a></td>
+                    <td class="link-color"><a href=<?php echo "pendingEntities.php?approveName=" . $row['Name'];?>>Approve</a></td>
+                    <td><?php echo $row['Name']; ?></td>
+                    <td><?php echo $row['Type']; ?></td>
+                  </tr>
+                  <?php } ?>
             </tbody>
           </table>
         </div> <!-- End Property Table Wrapper -->
