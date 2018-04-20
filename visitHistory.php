@@ -25,7 +25,7 @@
         <div class = "col-md-6 offset-md-3">
 
           <div class="property-table">
-            <table class="table table-striped table-sm">
+            <table class="table table-striped table-sm sortable">
               <thead class="thead-dark">
                 <tr>
                   <th scope="col">Name</th>
