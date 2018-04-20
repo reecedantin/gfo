@@ -4,7 +4,7 @@
 <?php
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         if(isset($_POST['delete'])) {
-            $sql = "DELETE FROM Property WHERE Size = '200' AND ID = '" . $_POST['id'] . "' AND Owner = '" . $_SESSION['login_user'] . "'";
+            $sql = "DELETE FROM Property WHERE AND ID = '" . $_POST['delete'] . "' AND Owner = '" . $_SESSION['login_user'] . "'";
             $result = mysqli_query($db,$sql);
 
             if($result == true && mysql_affected_rows == 1) {
