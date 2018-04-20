@@ -11,7 +11,7 @@
 <?php include("config.php"); ?>
 
 <body>
-z
+
   <?php include("navbar.php"); ?>
 
   <section>

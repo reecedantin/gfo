@@ -32,8 +32,19 @@ if($_SESSION['user_type'] != "ADMIN") {
           <form class="form-horizontal">
             <fieldset>
 
+
+
               <div class="form-group">
-                <label class="col-md-12 control-label" for="addCrop">Add New Crop</label>
+                <label class="col-md-12 control-label" for="addCrop"><b>Add New Crop</b></label>
+
+                 <label class="col-md-12 control-label" for="type">Type*</label>
+                  <div class="col-md-12 rowspace">
+                    <select id="propertyType" name="type" class="form-control" onChange="FarmTypeChanged()">
+                      <option value="farm">Farm</option>
+                      <option value="garden">Garden</option>
+                      <option value="orchard">Orchard</option>
+                    </select>
+                  </div>
 
                 <div class="col-md-12 rowspace">
                   <input id="cropRequest" name="cropRequest" type="text" placeholder="Enter New Crop Name" class="form-control input-md">
