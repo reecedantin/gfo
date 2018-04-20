@@ -88,8 +88,8 @@
       <div class ="row">
         <div class = "col-md-12">
 
-          <div class="property-table table-scroll">
-            <table class="table table-striped table-sm">
+          <div class="property-table-scroll">
+            <table class="table table-striped table-sm sortable">
               <thead class="thead-dark">
                 <tr>
                   <th scope="col">Delete Visitor</th>
