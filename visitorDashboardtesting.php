@@ -12,35 +12,6 @@
 
 <body>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
-
-  <script type="text/javascript">
-$(document).ready(function() {
-    // Setup - add a text input to each footer cell
-    $('#example tfoot th').each( function () {
-        var title = $(this).text();
-        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-    } );
- 
-    // DataTable
-    var table = $('#example').DataTable();
- 
-    // Apply the search
-    table.columns().every( function () {
-        var that = this;
- 
-        $( 'input', this.footer() ).on( 'keyup change', function () {
-            if ( that.search() !== this.value ) {
-                that
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-    } );
-} );
-  </script>
-
 
   <?php include("navbar.php"); ?>
 
@@ -93,7 +64,7 @@ $(document).ready(function() {
       <div class = "col-md-12">
 
         <div class="property-table">
-          <table class="table table-striped table-sm" id="example">
+          <table class="table table-striped table-sm sortable">
               <thead class="thead-dark">
                 <tr>
                   <th scope="col">Name</th>
@@ -154,7 +125,7 @@ $(document).ready(function() {
 
 
       </div> <!-- End Column -->
-    </div> <!-- End Row -->
+    </div> <!-- End Row --> <br> <br>
 
 
   </div> <!-- End Container -->

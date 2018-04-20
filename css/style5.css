@@ -541,7 +541,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* Table Styling */
 
 
-/*.property-table tr {
+.property-table tr {
 width: 100%;
 display: inline-table;
 table-layout: fixed;
@@ -562,7 +562,7 @@ table-layout: fixed;
   width: 100%;
   position: absolute;
 }
-*/
+
 /* Property Table Scroll Bar */
 .table-scroll tbody::-webkit-scrollbar {
     width: 0.4em;
@@ -578,11 +578,11 @@ table-layout: fixed;
 }
 
 /* Property Details */
-
+/*
 .table-wrapper{
   height: 300px;
   overflow-y: scroll;
-}
+}*/
 
 /* Manage Properties */
 .manage-card {
