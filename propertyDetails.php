@@ -41,6 +41,8 @@
         $cropsresult = mysqli_query($db, "SELECT * FROM Has WHERE PropertyID = '" . $foundproperty['ID'] . "' AND ItemName NOT IN (SELECT Name FROM FarmItem WHERE Type = 'ANIMAL')");
         $animalresult = mysqli_query($db, "SELECT * FROM Has WHERE PropertyID = '" . $foundproperty['ID'] . "' AND ItemName IN (SELECT Name FROM FarmItem WHERE Type = 'ANIMAL')");
 
+        $userhasvisited = false;
+
         if($_SESSION['user_type'] == "VISITOR") {
             $userhasvisitresult = mysqli_query($db, "SELECT * FROM Visit WHERE Username = '" . $_SESSION['login_user'] . "' AND PropertyID = '" . $foundproperty['ID']. "'");
             $userhasvisited = (mysqli_num_rows($userhasvisitresult) == 1);

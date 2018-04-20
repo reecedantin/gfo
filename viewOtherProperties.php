@@ -77,7 +77,7 @@
               </thead>
             <tbody>
                 <?php
-                $result = mysqli_query($db, "SELECT * FROM Property WHERE Owner != " . $_SESSION['login_user'] . "'");
+                $result = mysqli_query($db, "SELECT * FROM Property WHERE Owner != '" . $_SESSION['login_user'] . "'");
                  while ($row = mysqli_fetch_array($result)) {?>
                      <tr>
                          <td class="link-color"><a href=<?php echo "propertyDetails.php?id=" . $row['ID'];?>><?php echo $row['Name'];?></a></td>
