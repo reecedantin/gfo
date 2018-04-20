@@ -1,9 +1,41 @@
 <?php include('session.php'); ?>
+<?php include('config.php'); ?>
 <?php
 if($_SESSION['user_type'] != "ADMIN") {
   header("Location: index.php");
 }
 ?>
+
+<?php
+
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        if(isset($_POST['addName']) && isset($_POST['addType'])) {
+            $sql = "INSERT INTO FarmItem (Name, IsApproved, Type) VALUES ('" . $_POST['addName'] . "', '1', '" . $_POST['addType'] . "')";
+            $result = mysqli_query($db,$sql);
+            if($result == true) {
+                echo "<script type='text/javascript'>if(!alert(\"Successfully added: " . $_POST['addName'] . "\")) document.location = 'approvedEntities.php';</script>";
+            } else {
+                echo "<script type='text/javascript'>if(!alert(\"Error: Could not add: " . $_POST['addName'] . "\")) document.location = 'approvedEntities.php';</script>";
+            }
+        }
+    } else {
+        if(isset($_GET['deleteName'])) {
+            $sql = "DELETE FROM FarmItem WHERE Name = '" . $_GET['deleteName'] . "'";
+            $result = mysqli_query($db,$sql);
+            if($result == true) {
+                echo "<script type='text/javascript'>if(!alert(\"Successfully deleted: " . $_GET['deleteName'] . "\")) document.location = 'approvedEntities.php';</script>";
+            } else {
+                echo "<script type='text/javascript'>if(!alert(\"Error: Could not delete: " . $_GET['deleteName'] . "\")) document.location = 'approvedEntities.php';</script>";
+            }
+        }
+    }
+
+    $farmItemList = array('ANIMAL', 'FRUIT', 'FLOWER', 'VEGETABLE', 'NUT');
+
+    $approvedItemsql = "SELECT * FROM FarmItem WHERE IsApproved = '1'";
+    $approvedItems = mysqli_query($db, $approvedItemsql);
+ ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,29 +61,26 @@ if($_SESSION['user_type'] != "ADMIN") {
       <div class="row">
         <div class="col-md-6 offset-md-3">
 
-          <form class="form-horizontal">
-            <fieldset>
-
-
-
+          <form class="form-horizontal" method="post">
               <div class="form-group">
                 <label class="col-md-12 control-label" for="addCrop"><b>Add New Crop</b></label>
 
                  <label class="col-md-12 control-label" for="type">Type*</label>
                   <div class="col-md-12 rowspace">
-                    <select id="propertyType" name="type" class="form-control" onChange="FarmTypeChanged()">
-                      <option value="farm">Farm</option>
-                      <option value="garden">Garden</option>
-                      <option value="orchard">Orchard</option>
+                    <select id="addType" name="addType" class="form-control" onChange="FarmTypeChanged()">
+                        <option value=""></option>
+                        <?php foreach ($farmItemList as &$value) {  ?>
+                            <option value="<?php echo $value ?>"><?php echo $value ?></option>
+                        <?php } ?>
                     </select>
                   </div>
 
                 <div class="col-md-12 rowspace">
-                  <input id="cropRequest" name="cropRequest" type="text" placeholder="Enter New Crop Name" class="form-control input-md">
+                  <input id="addName" name="addName" type="text" placeholder="Enter New Crop Name" class="form-control input-md">
                 </div>
 
                 <div class="col-md-12">
-                  <button id="addCrop" name="addCrop" class="btn btn-primary style-bkg" style="width: 100%;">Add to Approved List</button>
+                  <button id="addCrop" class="btn btn-primary style-bkg" style="width: 100%;">Add to Approved List</button>
                 </div>
               </div> <!-- End form group -->
 
@@ -112,66 +141,13 @@ if($_SESSION['user_type'] != "ADMIN") {
                 </tr>
               </thead>
               <tbody>
-               <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Apple</td>
-                <td>Fruit</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Antelope</td>
-                <td>Animal</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Apple</td>
-                <td>Fruit</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Antelope</td>
-                <td>Animal</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Apple</td>
-                <td>Fruit</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Antelope</td>
-                <td>Animal</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Apple</td>
-                <td>Fruit</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Antelope</td>
-                <td>Animal</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Apple</td>
-                <td>Fruit</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Antelope</td>
-                <td>Animal</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Apple</td>
-                <td>Fruit</td>
-              </tr>
-              <tr>
-                <td class="link-color"><a>Delete</a></td>
-                <td>Antelope</td>
-                <td>Animal</td>
-              </tr>
+                  <?php while ($row = mysqli_fetch_array($approvedItems)) { ?>
+                  <tr>
+                    <td class="link-color"><a href=<?php echo "approvedEntities.php?deleteName=" . $row['Name'];?>>Delete</a></td>
+                    <td><?php echo $row['Name']; ?></td>
+                    <td><?php echo $row['Type']; ?></td>
+                  </tr>
+                  <?php } ?>
             </tbody>
           </table>
         </div> <!-- End Property Table Wrapper -->

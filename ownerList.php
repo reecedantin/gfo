@@ -12,7 +12,6 @@
        if(isset($_GET['username'])) {
            $sql = "DELETE FROM User WHERE Username = '" . $_GET['username'] . "'";
            $result = mysqli_query($db,$sql);
-           print $result;
            if($result == true) {
                echo "<script type='text/javascript'>if(!alert(\"Successfully deleted user: " . $_GET['username'] . "\")) document.location = 'ownerList.php';</script>";
            } else {
