@@ -1,3 +1,57 @@
+<?php
+   include("config.php");
+   session_start();
+   if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+      $sql = "INSERT INTO User (Username, Email, Password, UserType) VALUES ('" . $_POST['username'] . "', '" . $_POST['email'] . "', '" . md5($_POST['password']) . "', 'OWNER' )";
+      $result = mysqli_query($db,$sql);
+
+      $ispublic = ($_POST['public'] == "true");
+      $iscommercial = ($_POST['commercial'] == "true");
+
+      $nextIDresult = mysqli_query($db, "SELECT COUNT(*) FROM Property");
+      $nextIDrow = mysqli_fetch_array($nextIDresult);
+      $nextID = $nextIDrow['COUNT(*)'];
+
+      $sql = "INSERT INTO Property (ID, Name, Size, IsCommercial, IsPublic, Street, City, Zip, PropertyType, Owner) VALUES (
+      '" . $nextID . "',
+      '" . $_POST['propertyName'] . "',
+      '" . $_POST['size'] . "',
+      '" . $iscommercial . "',
+      '" . $ispublic . "',
+      '" . $_POST['streetAddress'] . "',
+      '" . $_POST['city'] . "',
+      '" . $_POST['zip'] . "',
+      '" . strtoupper($_POST['type']) . "',
+      '" . $_POST['username'] . "')";
+
+      $resultone = mysqli_query($db,$sql);
+
+      $resulttwo = true;
+
+      if($_POST['type'] == "farm") {
+          $animalsql = "INSERT INTO Has (PropertyID, ItemName) VALUES ('" . $nextID . "','" . $_POST['animal'] . "')";
+          $resulttwo = mysqli_query($db, $animalsql);
+      }
+
+      $cropsql = "INSERT INTO Has (PropertyID, ItemName) VALUES ('" . $nextID . "','" . $_POST['crop'] . "')";
+      $resultthree = mysqli_query($db, $cropsql);
+
+      if($result == true) {
+         $_SESSION['login_user'] = $_POST['username'];
+         $_SESSION['user_type'] = 'OWNER';
+         header("Location: ownerDashboard.php");
+      } else {
+         echo "<script type='text/javascript'>alert('There was an error creating the account');</script>";
+      }
+   }
+?>
+
+<?php
+        $allcropsresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '0' AND Type != 'ANIMAL'");
+        $allanimalresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '0' AND Type = 'ANIMAL'");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,8 +71,7 @@
 
        <div class="card">
         <div class="card-body">
-          <form class="form-horizontal" action='createOwner.php' method='post'>
-            <fieldset>
+          <form class="form-horizontal" action='newOwnerReg.php' name="newOwnerForm" id="newOwnerForm" method='post'>
 
               <!-- Form Name -->
               <legend>New Owner Registration</legend>
@@ -27,15 +80,15 @@
               <div class="row rowspace">
                 <!-- Text input-->
                 <div class="col-md-4">
-                  <input id="emailid" name="emailid" type="text" placeholder="Email" class="form-control input-md" required="">
+                  <input id="email" name="email" type="text" placeholder="Email" class="form-control input-md" required="">
                 </div>
 
                 <div class="col-md-4">
-                  <input id="passwordinput" name="passwordinput" type="password" placeholder="Password" class="form-control input-md" required="">
+                  <input id="password" name="password" type="password" placeholder="Password" class="form-control input-md" required="">
                 </div>
 
                 <div class="col-md-4">
-                  <input id="confirmpasswordinput" name="confirmpasswordinput" type="password" placeholder="Confirm Password" class="form-control input-md" required="">
+                  <input id="confirmpassword" name="confirmpassword" type="password" placeholder="Confirm Password" class="form-control input-md" required="">
                 </div>
 
               </div> <!-- End Row -->
@@ -48,53 +101,56 @@
 
                 <!-- Text input-->
                 <div class="col-md-4">
-                  <input id="usernameID" name="usernameID" type="text" placeholder="Username" class="form-control input-md" required="">
+                  <input id="username" name="username" type="text" placeholder="Username" class="form-control input-md" required="">
                 </div>
 
                 <div class="col-md-4">
-                  <input id="propertyNameId" name="propertyName" type="text" placeholder="Property Name" class="form-control input-md" required="">
+                  <input id="propertyName" name="propertyName" type="text" placeholder="Property Name" class="form-control input-md" required="">
                 </div>
 
                 <div class="col-md-4">
-                  <input id="streetAddressId" name="streetAddress" type="text" placeholder="Street Address" class="form-control input-md" required="">
+                  <input id="streetAddress" name="streetAddress" type="text" placeholder="Street Address" class="form-control input-md" required="">
                 </div>
               </div> <!-- End Row-->
 
 
               <div class="row rowspace">
                 <div class="col-md-4">
-                  <input id="cityId" name="city" type="text" placeholder="City" class="form-control input-md" required="">
+                  <input id="city" name="city" type="text" placeholder="City" class="form-control input-md" required="">
                 </div>
                 <div class="col-md-4">
-                  <input id="zipId" name="zip" type="text" placeholder="Zip" class="form-control input-md" required="">
+                  <input id="zip" name="zip" type="text" placeholder="Zip" class="form-control input-md" required="">
                 </div>
                 <div class="col-md-4">
-                  <input id="AcresId" name="Acres" type="text" placeholder="Acres" class="form-control input-md" required="">
+                  <input id="size" name="size" type="text" placeholder="Acres" class="form-control input-md" required="">
                 </div>
               </div> <!-- End Row -->
 
               <div class="row rowspace">
                 <div class="col-md-4">
-                  <select id="propertyType" name="propertyType" class="form-control">
-                    <option value="1">Property Type</option>
-                    <option value="2">Farm</option>
-                    <option value="3">Garden</option>
+                  <select id="propertyType" name="type" onchange="FarmTypeChanged()" class="form-control">
+                    <option value="">Property Type</option>
+                    <option value="farm">Farm</option>
+                    <option value="garden">Garden</option>
+                    <option value="orchard">Orchard</option>
                   </select>
                 </div>
 
                 <div class="col-md-4">
-                  <select id="animalType" name="animalType" class="form-control">
-                    <option value="1">Animal</option>
-                    <option value="2">Monkey</option>
-                    <option value="3">Lion</option>
+                  <select id="animalSelect" name="animal" class="form-control" hidden="true">
+                    <option value="">Animal</option>
+                    <?php while ($row = mysqli_fetch_array($allanimalresult)) { ?>
+                       <option value="<?php echo $row['Name']; ?>"><?php echo $row['Name']; ?></option>
+                    <?php } ?>
                   </select>
                 </div>
 
                 <div class="col-md-4">
-                  <select id="cropType" name="cropType" class="form-control">
-                    <option value="1">Crop</option>
-                    <option value="2">Corn</option>
-                    <option value="3">Wheat</option>
+                  <select id="cropSelect" name="crop" class="form-control">
+                    <option value="">Crop</option>
+                    <?php while ($row = mysqli_fetch_array($allcropsresult)) { ?>
+                       <option value="<?php echo $row['Name']; ?>"><?php echo $row['Name']; ?></option>
+                    <?php } ?>
                   </select>
                 </div>
               </div>
@@ -102,18 +158,18 @@
               <div class="row rowspace">
 
                 <div class="col-md-4">
-                  <select id="propertyType" name="propertyType" class="form-control">
-                    <option value="1">Public?</option>
-                    <option value="2">Yes</option>
-                    <option value="3">No</option>
+                  <select id="public" name="public" class="form-control">
+                    <option value="">Public?</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
                   </select>
                 </div>
 
                 <div class="col-md-4">
-                  <select id="commercialType" name="commercialType" class="form-control">
-                    <option value="1">Commercial?</option>
-                    <option value="2">Yes</option>
-                    <option value="3">No</option>
+                  <select id="commercial" name="commercial" class="form-control">
+                    <option value="">Commercial?</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
                   </select>
                 </div>
 
@@ -130,14 +186,11 @@
 
               <!-- Submit Button -->
               <div class="col-md-6">
-               <input class="btn-get-started2" type="submit" value="Create Account">
+               <input class="btn-get-started2" onclick="RegisterUser()" type="button" value="Create Account">
              </div>
 
 
            </div> <!-- End Row -->
-
-
-         </fieldset> <!-- End Fieldset -->
        </form> <!-- End Form -->
 
 
@@ -147,6 +200,64 @@
 
  </div>
 </section>
+<script>
+    function RegisterUser() {
+        validateForm();
+        var propertySelect = document.getElementById("propertyType");
+        if(propertySelect.options[propertySelect.selectedIndex].text == "") {
+            alert("You must select a property type");
+            return;
+        } else if (propertySelect.options[propertySelect.selectedIndex].text == "Farm") {
+            var animalSelect = document.getElementById("animalSelect");
+            if(animalSelect.options[animalSelect.selectedIndex].text == "") {
+                alert("You must select an animal");
+                return;
+            }
+        }
 
-  </body>
-  </html>
+        var cropSelect = document.getElementById("cropSelect");
+        if(cropSelect.options[cropSelect.selectedIndex].text == "") {
+            alert("You must select a crop");
+            return;
+        }
+
+        var public = document.getElementById("public");
+        if(public.options[public.selectedIndex].text == "") {
+            alert("You must change the public parameter.");
+            return;
+        }
+
+        var commercial = document.getElementById("commercial");
+        if(commercial.options[commercial.selectedIndex].text == "") {
+            alert("You must change the commercial parameter.");
+            return;
+        }
+
+        document.getElementById("newOwnerForm").submit();
+    }
+
+    function FarmTypeChanged() {
+        var propertySelect = document.getElementById("propertyType");
+        var animalSelect = document.getElementById("animalSelect");
+        var animalLabel = document.getElementById("animalLabel");
+        if(propertySelect.options[propertySelect.selectedIndex].text == "Farm") {
+            animalSelect.hidden = false;
+            animalLabel.hidden = false;
+        } else {
+            animalSelect.hidden = true;
+            animalLabel.hidden = true;
+        }
+    }
+
+    function validateForm() {
+        var x = document.forms["newOwnerForm"]["password"].value;
+        var y = document.forms["newOwnerForm"]["confirmpassword"].value;
+
+        if (x != y) {
+            alert("Passwords must match");
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

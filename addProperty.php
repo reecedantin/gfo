@@ -45,9 +45,6 @@
 
 
 <?php
-
-        $nextID = mysqli_query($db, "SELECT COUNT(*) FROM Property");
-
         $allcropsresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '0' AND Type != 'ANIMAL'");
         $allanimalresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '0' AND Type = 'ANIMAL'");
 ?>
