@@ -4,11 +4,24 @@
 <?php
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         if(isset($_POST['delete'])) {
-            $sql = "DELETE FROM Property WHERE ID = '" . $_POST['delete'] . "' AND Owner = '" . $_SESSION['login_user'] . "'";
+            $sql = "";
+
+            if($_SESSION['user_type'] == 'OWNER') {
+                $sql = "DELETE FROM Property WHERE ID = '" . $_POST['delete'] . "' AND Owner = '" . $_SESSION['login_user'] . "'";
+            } else if($_SESSION['user_type'] == 'ADMIN') {
+                $sql = "DELETE FROM Property WHERE ID = '" . $_POST['delete'] . "'";
+            }
             $result = mysqli_query($db,$sql);
 
-            $sqltwo = "DELETE FROM Has WHERE PropertyID = '" . $_POST['delete'] . "'";
-            $resulttwo = mysqli_query($db,$sqltwo);
+            $resulttwo = true;
+
+            if ($result) {
+                $sqltwo = "DELETE FROM Has WHERE PropertyID = '" . $_POST['delete'] . "'";
+                $resulttwo = mysqli_query($db,$sqltwo);
+
+                $sqlthree = "DELETE FROM Visit WHERE PropertyID = '" . $_POST['delete'] . "'";
+                $resulttwo = ($resulttwo && mysqli_query($db,$sqlthree));
+            }
 
             if($result && $resulttwo) {
                 echo "<script type='text/javascript'>if(!alert(\"Successfully deleted property\")) document.location = 'index.php';</script>";
@@ -21,14 +34,29 @@
            $ispublic = ($_POST['public'] == "true");
            $iscommercial = ($_POST['commercial'] == "true");
 
-           $sql = "UPDATE Property SET
-           Name = '" . $_POST['propertyName'] . "',
-           Street = '" . $_POST['address'] . "',
-           City = '" . $_POST['city'] . "',
-           Zip = '" . $_POST['zip'] . "',
-           Size = '" . $_POST['size'] . "',
-           IsPublic = '" . $ispublic . "',
-           IsCommercial = '" . $iscommercial . "' WHERE ID = '" . $_POST['id'] . "' AND Owner = '" . $_SESSION['login_user'] . "'";
+           $sql = "";
+
+           if($_SESSION['user_type'] == 'OWNER') {
+               $sql = "UPDATE Property SET
+               Name = '" . $_POST['propertyName'] . "',
+               Street = '" . $_POST['address'] . "',
+               City = '" . $_POST['city'] . "',
+               Zip = '" . $_POST['zip'] . "',
+               Size = '" . $_POST['size'] . "',
+               IsPublic = '" . $ispublic . "',
+               IsCommercial = '" . $iscommercial . "' WHERE ID = '" . $_POST['id'] . "' AND Owner = '" . $_SESSION['login_user'] . "'";
+
+           } else if($_SESSION['user_type'] == 'ADMIN') {
+               $sql = "UPDATE Property SET
+                   Name = '" . $_POST['propertyName'] . "',
+                   Street = '" . $_POST['address'] . "',
+                   City = '" . $_POST['city'] . "',
+                   Zip = '" . $_POST['zip'] . "',
+                   Size = '" . $_POST['size'] . "',
+                   IsPublic = '" . $ispublic . "',
+                   ApprovedBy = '" . $_SESSION['login_user'] . "',
+                   IsCommercial = '" . $iscommercial . "' WHERE ID = '" . $_POST['id'] . "'";
+           }
 
            $result = mysqli_query($db,$sql);
 
@@ -43,7 +71,14 @@
 
 
 <?php
-    $findpropertywithID = mysqli_query($db, "SELECT * FROM Property WHERE ID = '" . $_GET['id'] . "' AND Owner = '" . $_SESSION['login_user'] . "'");
+    if($_SESSION['user_type'] == 'OWNER') {
+        $propertysql = "SELECT * FROM Property WHERE ID = '" . $_GET['id'] . "' AND Owner = '" . $_SESSION['login_user'] . "'";
+    } else if($_SESSION['user_type'] == 'ADMIN') {
+        $propertysql = "SELECT * FROM Property WHERE ID = '" . $_GET['id'] . "'";
+    } else {
+        header("Location: index.php");
+    }
+    $findpropertywithID = mysqli_query($db, $propertysql);
     $foundproperty = mysqli_fetch_array($findpropertywithID);
 
     $count = mysqli_num_rows($findpropertywithID);
@@ -58,7 +93,7 @@
         }
 
     } else {
-       echo "<script type='text/javascript'>if(!alert(\"Could not find property\")) document.location = 'index.php';</script>";
+       echo "<script type='text/javascript'>if(!alert(\"Could not find property " . $propertysql .  "   \")) document.location = 'index.php';</script>";
     }
 ?>
 
@@ -233,7 +268,11 @@
         </div> <!-- End Outer Column -->
             <div class="row">
               <div class="col-md-2 offset-md-3">
-                <button id="saveProperty" name="saveProperty" class="btn btn-success style-bkg" style="width: 100%;">Save</button>
+                <button id="saveProperty" name="saveProperty" class="btn btn-success style-bkg" style="width: 100%;"><?php if($_SESSION['user_type'] == 'ADMIN' && $foundproperty['ApprovedBy'] == NULL) {
+                    echo "Save and Confirm";
+                } else {
+                    echo "SAVE";
+                } ?></button>
               </div>
 
               <div class="col-md-2">

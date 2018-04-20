@@ -79,17 +79,15 @@
                 <th scope="col">Public</th>
                 <th scope="col">Commercial</th>
                 <th scope="col">&nbsp ID</th>
-                <th scope="col">Approved By</th>
-                <th scope="col">Visits</th>
-                <th scope="col">Rating</th>
+                <th scope="col">Owner</th>
               </tr>
             </thead>
             <tbody>
                 <?php
-                $result = mysqli_query($db, "SELECT * FROM Property WHERE ApprovedBy = 'NULL'");
+                $result = mysqli_query($db, "SELECT * FROM Property WHERE ApprovedBy IS NULL");
                  while ($row = mysqli_fetch_array($result)) {?>
                      <tr>
-                         <th scope="row"><a href="manageProperty.php">Edit</a></th>
+                         <th scope="row"><a href=<?php echo "manageProperty.php?id=" . $row['ID'];?>>Edit</a></th>
                          <td class="link-color"><a href=<?php echo "propertyDetails.php?id=" . $row['ID'];?>><?php echo $row['Name'];?></a></td>
                          <td><?php echo $row['Street'];?></td>
                          <td><?php echo $row['City'];?></td>
@@ -109,18 +107,7 @@
                                 } ?>
                          </td>
                          <td><?php echo $row['ID'];?></td>
-                         <td><?php if ($row['ApprovedBy'] == "NULL") {
-                                    echo "Not Approved";
-                                } else {
-                                    echo $row['ApprovedBy'];
-                                } ?>
-                         </td>
-                         <td><?php
-                                    $visitsql = "SELECT COUNT(*),  AVG(Rating) FROM Visit WHERE PropertyID = '" . $row['ID'] . "'";
-                                    $visitresult = mysqli_query($db, $visitsql);
-                                    $visitrow = mysqli_fetch_array($visitresult);
-                                    echo $visitrow['COUNT(*)'];?></td>
-                         <td><?php echo $visitrow["AVG(Rating)"];?></td>
+                         <td><?php echo $row['Owner']; ?>
                      </tr>
                 <?php  } ?>
 

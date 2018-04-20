@@ -24,7 +24,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<?php include("config.php"); ?>
 
 <?php include("head.php"); ?>
 
