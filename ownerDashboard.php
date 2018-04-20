@@ -66,7 +66,7 @@
       <div class = "col-md-12">
 
         <div class="property-table table-scroll">
-          <table class="table table-striped table-sm" id="people" sortable>
+          <table class="table table-striped table-sm sortable" id="people">
             <thead class="thead-dark">
               <tr>
                 <th scope="col">Manage</th>

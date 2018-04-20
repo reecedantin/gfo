@@ -20,12 +20,13 @@
   <link href="lib/animate/animate.min.css" rel="stylesheet">
 
   <!-- Main Stylesheet File -->
-  <link href="css/style4.css" rel="stylesheet">
+  <link href="css/style5.css" rel="stylesheet">
 
 
   <!-- JavaScript Libraries -->
   <script src="lib/jquery/jquery.min.js"></script>
   <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="js/sorttable.js"></script>
 
   <!-- Template Main Javascript File -->
   <script src="js/main.js"></script>

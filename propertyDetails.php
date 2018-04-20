@@ -75,7 +75,7 @@
       <div class ="row">
         <div class = "col-md-4 offset-md-4">
 
-         <table class="table table-condensed table-sm table-striped">
+         <table class="table table-condensed table-sm table-striped sortable">
           <thead>
 
           </thead>
@@ -172,7 +172,7 @@
             <div class ="row">
               <div class = "col-md-4 offset-md-4">
 
-                <table class="table table-condensed table-sm">
+                <table class="table table-condensed table-sm sortable">
                   <thead>
 
                   </thead>

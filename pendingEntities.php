@@ -65,7 +65,7 @@ if($_SESSION['user_type'] != "ADMIN") {
         <div class = "col-md-12">
 
           <div class="property-table table-scroll">
-            <table class="table table-striped table-sm">
+            <table class="table table-striped table-sm sortable">
               <thead class="thead-dark">
                 <tr>
                   <th scope="col">Delete</th>
