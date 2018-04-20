@@ -193,7 +193,7 @@
                         <div class="col-md-6" id="cropsList">
                             <?php while ($row = mysqli_fetch_array($cropsresult)) { ?>
                               <div class="checkbox">
-                                <label for="currentCrops-<?php echo $countCrops; ?>">
+                                <label for="currentCrops">
                                   <input type="checkbox" name="currentCrops" value="<?php echo $row['ItemName']; ?>" checked="checked">
                                   <?php echo $row['ItemName']; ?>
                                 </label>
@@ -205,7 +205,7 @@
                             <div class="col-md-6" id="animalList">
                                 <?php while ($row = mysqli_fetch_array($animalresult)) { ?>
                                   <div class="checkbox">
-                                    <label for="currentAnimals-<?php echo $countAnimals; ?>">
+                                    <label for="currentAnimals">
                                       <input type="checkbox" name="currentAnimals" value="<?php echo $row['ItemName']; ?>" checked="checked">
                                       <?php echo $row['ItemName']; ?>
                                     </label>
