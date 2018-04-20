@@ -71,14 +71,13 @@
                   <th scope="col">Public</th>
                   <th scope="col">Commercial</th>
                   <th scope="col">&nbsp ID</th>
-                  <th scope="col">Approved By</th>
                   <th scope="col">Visits</th>
                   <th scope="col">Rating</th>
                 </tr>
               </thead>
             <tbody>
                 <?php
-                $result = mysqli_query($db, "SELECT * FROM Property;");
+                $result = mysqli_query($db, "SELECT * FROM Property WHERE Owner != '" . $_SESSION['login_user'] . "'");
                  while ($row = mysqli_fetch_array($result)) {?>
                      <tr>
                          <td class="link-color"><a href=<?php echo "propertyDetails.php?id=" . $row['ID'];?>><?php echo $row['Name'];?></a></td>
@@ -100,12 +99,6 @@
                                 } ?>
                          </td>
                          <td><?php echo $row['ID'];?></td>
-                         <td><?php if ($row['ApprovedBy'] == "NULL") {
-                                    echo "Not Approved";
-                                } else {
-                                    echo $row['ApprovedBy'];
-                                } ?>
-                         </td>
                          <td><?php
                                     $visitsql = "SELECT COUNT(*),  AVG(Rating) FROM Visit WHERE PropertyID = '" . $row['ID'] . "'";
                                     $visitresult = mysqli_query($db, $visitsql);

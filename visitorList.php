@@ -1,13 +1,37 @@
 <?php include('session.php'); ?>
+<?php include("config.php"); ?>
 <?php
-if($_SESSION['user_type'] != "ADMIN") {
-  header("Location: index.php");
-}
+    if($_SESSION['user_type'] != "ADMIN") {
+      header("Location: index.php");
+    }
 ?>
+<?php
+    if($_SERVER["REQUEST_METHOD"] == "GET") {
+       // username and password sent from form
+       if(isset($_GET['deleteUser'])) {
+           $sql = "DELETE FROM User WHERE Username = '" . $_GET['deleteUser'] . "'";
+           $result = mysqli_query($db,$sql);
+
+           if($result == true) {
+               echo "<script type='text/javascript'>if(!alert(\"Successfully deleted user: " . $_GET['deleteUser'] . "\")) document.location = 'visitorList.php';</script>";
+           } else {
+               echo "<script type='text/javascript'>if(!alert(\"Error: Could not delete user: " . $_GET['deleteUser'] . "\")) document.location = 'visitorList.php';</script>";
+           }
+       } else if(isset($_GET['deleteLogs'])) {
+           $sql = "DELETE FROM Visit WHERE Username = '" . $_GET['deleteLogs'] . "'";
+           $result = mysqli_query($db,$sql);
+           print $result;
+           if($result == true) {
+               echo "<script type='text/javascript'>if(!alert(\"Successfully deleted logs for user: " . $_GET['deleteLogs'] . "\")) document.location = 'visitorList.php';</script>";
+           } else {
+               echo "<script type='text/javascript'>if(!alert(\"Error: Could not delete logs for user: " . $_GET['deleteLogs'] . "\")) document.location = 'visitorList.php';</script>";
+           }
+       }
+   }
+ ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<?php include("config.php"); ?>
 
 <?php include("head.php"); ?>
 
@@ -80,15 +104,15 @@ if($_SESSION['user_type'] != "ADMIN") {
                   $result = mysqli_query($db, "SELECT * FROM User WHERE UserType = 'VISITOR';");
                    while ($row = mysqli_fetch_array($result)) {?>
                        <tr>
-                           <td class="link-color">Delete</td>
-                           <td class="link-color">Delete</td>
+                           <td class="link-color"><a href=<?php echo "visitorList.php?deleteUser=" . $row['Username'];?>>Delete</a></td>
+                           <td class="link-color"><a href=<?php echo "visitorList.php?deleteLogs=" . $row['Username'];?>>Delete</a></td>
                            <td><?php echo $row['Username'];?></td>
                            <td><?php echo $row['Email'];?></td>
                            <td><?php
                                       $visitsql = "SELECT COUNT(*) FROM Visit WHERE Username = '" . $row['Username'] . "'";
                                       $visitresult = mysqli_query($db, $visitsql);
                                       $visitrow = mysqli_fetch_array($visitresult);
-                                      echo $visitrow['COUNT(*)'];?></td> 
+                                      echo $visitrow['COUNT(*)'];?></td>
                        </tr>
                   <?php  } ?>
 

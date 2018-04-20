@@ -82,7 +82,7 @@ z
               </thead>
             <tbody>
                 <?php
-                $result = mysqli_query($db, "SELECT * FROM Property WHERE ApprovedBy != 'NULL';");
+                $result = mysqli_query($db, "SELECT * FROM Property WHERE ApprovedBy IS NOT NULL;");
                  while ($row = mysqli_fetch_array($result)) {?>
                      <tr>
                          <td class="link-color"><a href=<?php echo "propertyDetails.php?id=" . $row['ID'];?>><?php echo $row['Name'];?></a></td>
@@ -104,7 +104,7 @@ z
                                 } ?>
                          </td>
                          <td><?php echo $row['ID'];?></td>
-                         <td><?php if ($row['ApprovedBy'] == "NULL") {
+                         <td><?php if ($row['ApprovedBy'] == NULL) {
                                     echo "Not Approved";
                                 } else {
                                     echo $row['ApprovedBy'];

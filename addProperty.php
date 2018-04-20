@@ -1,4 +1,55 @@
 <?php include("session.php") ?>
+<?php include('config.php'); ?>
+
+<?php
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+       $ispublic = ($_POST['public'] == "true");
+       $iscommercial = ($_POST['commercial'] == "true");
+
+       $nextIDresult = mysqli_query($db, "SELECT COUNT(*) FROM Property");
+       $nextIDrow = mysqli_fetch_array($nextIDresult);
+       $nextID = $nextIDrow['COUNT(*)'];
+
+       $sql = "INSERT INTO Property (ID, Name, Size, IsCommercial, IsPublic, Street, City, Zip, PropertyType, Owner) VALUES (
+       '" . $nextID . "',
+       '" . $_POST['propertyName'] . "',
+       '" . $_POST['size'] . "',
+       '" . $iscommercial . "',
+       '" . $ispublic . "',
+       '" . $_POST['streetAddress'] . "',
+       '" . $_POST['city'] . "',
+       '" . $_POST['zip'] . "',
+       '" . strtoupper($_POST['type']) . "',
+       '" . $_SESSION['login_user'] . "')";
+
+       $resultone = mysqli_query($db,$sql);
+
+       $resulttwo = true;
+
+       if($_POST['type'] == "farm") {
+           $animalsql = "INSERT INTO Has (PropertyID, ItemName) VALUES ('" . $nextID . "','" . $_POST['animal'] . "')";
+           $resulttwo = mysqli_query($db, $animalsql);
+       }
+
+       $cropsql = "INSERT INTO Has (PropertyID, ItemName) VALUES ('" . $nextID . "','" . $_POST['crop'] . "')";
+       $resultthree = mysqli_query($db, $cropsql);
+
+
+       if($resultone && $resulttwo && $resultthree) {
+           echo "<script type='text/javascript'>if(!alert(\"Successfully added property\")) document.location = 'index.php';</script>";
+       } else {
+           echo "<script type='text/javascript'>if(!alert(\"Error: Could not add property\")) document.location = 'index.php';</script>";
+       }
+    }
+?>
+
+
+<?php
+        $allcropsresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '0' AND Type != 'ANIMAL'");
+        $allanimalresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '0' AND Type = 'ANIMAL'");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,12 +71,9 @@
       <div class="row">
         <div class="col-md-12">
 
-          <form class="form-horizontal">
-            <fieldset>
-
+          <form class="form-horizontal" id="addPropertyForm" method="post">
               <div class="row ">
                 <div class="col-md-4 offset-md-2">
-
                   <label class="col-md-12 control-label" for="propertyName">Property Name*</label>
                   <div class="col-md-12">
                     <input id="propertyName" name="propertyName" type="text" placeholder="Property Name" class="form-control input-md" required="">
@@ -58,26 +106,31 @@
 
                   <label class="col-md-12 control-label" for="type">Type*</label>
                   <div class="col-md-12">
-                    <select id="type" name="type" class="form-control">
-                      <option value="1">Farm</option>
-                      <option value="2">Garden</option>
+                    <select id="propertyType" name="type" class="form-control" onChange="FarmTypeChanged()">
+                      <option value="farm">Farm</option>
+                      <option value="garden">Garden</option>
+                      <option value="orchard">Orchard</option>
                     </select>
                   </div> <br>
 
 
-                  <label class="col-md-12 control-label" for="animal">Animal*</label>
+                  <label class="col-md-12 control-label" id="animalLabel" for="animal">Animal*</label>
                   <div class="col-md-12">
-                    <select id="animal" name="animal" class="form-control">
-                      <option value="1">Snake</option>
-                      <option value="2">Lizard</option>
+                    <select id="animalSelect" name="animal" class="form-control">
+                        <option value=""></option>
+                        <?php while ($row = mysqli_fetch_array($allanimalresult)) { ?>
+                           <option value="<?php echo $row['Name']; ?>"><?php echo $row['Name']; ?></option>
+                        <?php } ?>
                     </select>
                   </div> <br>
 
                   <label class="col-md-12 control-label" for="crop">Crop*</label>
                   <div class="col-md-12">
-                    <select id="crop" name="crop" class="form-control">
-                      <option value="1">Wheat</option>
-                      <option value="2">Corn</option>
+                    <select id="cropSelect" name="crop" class="form-control">
+                        <option value=""></option>
+                        <?php while ($row = mysqli_fetch_array($allcropsresult)) { ?>
+                           <option value="<?php echo $row['Name']; ?>"><?php echo $row['Name']; ?></option>
+                        <?php } ?>
                     </select>
                   </div> <br>
 
@@ -85,16 +138,16 @@
                   <label class="col-md-12 control-label" for="public">Public?*</label>
                   <div class="col-md-12">
                     <select id="public" name="public" class="form-control">
-                      <option value="1">True</option>
-                      <option value="2">Flase</option>
+                      <option value="true">True</option>
+                      <option value="false">False</option>
                     </select>
                   </div> <br>
 
                   <label class="col-md-12 control-label" for="commercial">Commercial*</label>
                   <div class="col-md-12">
                     <select id="commercial" name="commercial" class="form-control">
-                      <option value="1">True</option>
-                      <option value="2">Flase</option>
+                      <option value="true">True</option>
+                      <option value="false">False</option>
                     </select>
                   </div> <br>
 
@@ -105,17 +158,14 @@
               <!-- Button Bar -->
               <div class="row button-adjust">
                 <div class="col-md-6">
-                  <button i="addCrop" name="addCrop" class="btn btn-success style-bkg" style="width: 100%;">&#x2b Add Property</button>
+                  <button type="button" onclick="AddProperty()" class="btn btn-success style-bkg" style="width: 100%;">Add Property</button>
                 </div>
 
                 <div class="col-md-6">
-                  <button id="addCrop" name="addCrop" class="btn btn-secondary" style="width: 100%;">&#x2190 Cancel</button>
+                  <a href="index.php"><div class="btn btn-secondary" style="width: 100%;">Cancel</div></a>
                 </div>
               </div> <!-- End Row -->
               <br> <br>
-
-
-            </fieldset>
           </form>
 
         </div> <!-- End Outer Column -->
@@ -125,6 +175,42 @@
 
     </div> <!-- End Container -->
   </section>
+  <script>
+    function AddProperty() {
+        var propertySelect = document.getElementById("propertyType");
+        var animalSelect = document.getElementById("animalSelect");
+        var cropSelect = document.getElementById("cropSelect");
+        if(propertySelect.options[propertySelect.selectedIndex].text == "Farm") {
+            if(animalSelect.selectedIndex == 0) {
+                alert("Error: Please select an animal");
+                return;
+            }
+            if(cropSelect.selectedIndex == 0) {
+                alert("Error: Please select a crop");
+                return;
+            }
+        } else {
+            if(cropSelect.selectedIndex == 0) {
+                alert("Error: Please select a crop");
+                return;
+            }
+            animalSelect.selectedIndex = 0;
+        }
+        document.getElementById("addPropertyForm").submit();
+    }
 
+    function FarmTypeChanged() {
+        var propertySelect = document.getElementById("propertyType");
+        var animalSelect = document.getElementById("animalSelect");
+        var animalLabel = document.getElementById("animalLabel");
+        if(propertySelect.options[propertySelect.selectedIndex].text == "Farm") {
+            animalSelect.hidden = false;
+            animalLabel.hidden = false;
+        } else {
+            animalSelect.hidden = true;
+            animalLabel.hidden = true;
+        }
+    }
+  </script>
 </body>
 </html>

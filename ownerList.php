@@ -1,13 +1,29 @@
 <?php include('session.php'); ?>
+<?php include("config.php"); ?>
 <?php
-if($_SESSION['user_type'] != "ADMIN") {
-  header("Location: index.php");
-}
+    if($_SESSION['user_type'] != "ADMIN") {
+      header("Location: index.php");
+    }
 ?>
+
+<?php
+    if($_SERVER["REQUEST_METHOD"] == "GET") {
+       // username and password sent from form
+       if(isset($_GET['username'])) {
+           $sql = "DELETE FROM User WHERE Username = '" . $_GET['username'] . "'";
+           $result = mysqli_query($db,$sql);
+           print $result;
+           if($result == true) {
+               echo "<script type='text/javascript'>if(!alert(\"Successfully deleted user: " . $_GET['username'] . "\")) document.location = 'ownerList.php';</script>";
+           } else {
+               echo "<script type='text/javascript'>if(!alert(\"Error: Could not delete user: " . $_GET['username'] . "\")) document.location = 'ownerList.php';</script>";
+           }
+       }
+   }
+ ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<?php include("config.php"); ?>
 
 <?php include("head.php"); ?>
 
@@ -76,14 +92,14 @@ if($_SESSION['user_type'] != "ADMIN") {
               </thead>
               <tbody>
               <?php
-              $result = mysqli_query($db, "SELECT * FROM User WHERE UserType = 'VISITOR';");
+              $result = mysqli_query($db, "SELECT * FROM User WHERE UserType = 'OWNER';");
                while ($row = mysqli_fetch_array($result)) {?>
                    <tr>
-                       <td class="link-color">Delete</td>
+                       <td class="link-color"><a href=<?php echo "ownerList.php?username=" . $row['Username'];?>>Delete</a></td>
                        <td><?php echo $row['Username'];?></td>
                        <td><?php echo $row['Email'];?></td>
                        <td><?php
-                                  $visitsql = "SELECT COUNT(*) FROM Property WHERE Username = '" . $row['Username'] . "'";
+                                  $visitsql = "SELECT COUNT(*) FROM Property WHERE Owner = '" . $row['Username'] . "'";
                                   $visitresult = mysqli_query($db, $visitsql);
                                   $visitrow = mysqli_fetch_array($visitresult);
                                   echo $visitrow['COUNT(*)'];?></td>
