@@ -233,7 +233,7 @@
        </form>
     <?php } else { ?>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4 offset-md-4">
               <a href="index.php"><div class="btn btn-secondary" style="width: 100%;">Back</div></a>
             </div>
         </div>

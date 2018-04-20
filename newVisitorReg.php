@@ -96,15 +96,14 @@ function validateForm() {
 
              <div class="col-md-12">
                <div class="row">
-                <!-- Registration Links -->
-                <div class="col-md-6">
-                  <a class="btn btn-success style-bkg" href="newOwnerReg.php">New Owner Registration</a> <br>
-                </div>
+
 
                 <!-- Registration Links -->
-                <div class="col-md-6">
-                  <a class="btn btn-success style-bkg" href="index.php">Existing Account Login</a> <br>
+                <div class="col-md-3">
+                  <a class="btn btn-success style-bkg" href="index.php">Back</a> <br>
                 </div>
+
+
               </div> <!-- End Row -->
             </div> <!-- End Column -->
 
