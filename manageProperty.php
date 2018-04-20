@@ -4,10 +4,13 @@
 <?php
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         if(isset($_POST['delete'])) {
-            $sql = "DELETE FROM Property WHERE AND ID = '" . $_POST['delete'] . "' AND Owner = '" . $_SESSION['login_user'] . "'";
+            $sql = "DELETE FROM Property WHERE ID = '" . $_POST['delete'] . "' AND Owner = '" . $_SESSION['login_user'] . "'";
             $result = mysqli_query($db,$sql);
 
-            if($result == true && mysql_affected_rows == 1) {
+            $sqltwo = "DELETE FROM Has WHERE PropertyID = '" . $_POST['delete'] . "'";
+            $resulttwo = mysqli_query($db,$sqltwo);
+
+            if($result && $resulttwo) {
                 echo "<script type='text/javascript'>if(!alert(\"Successfully deleted property\")) document.location = 'index.php';</script>";
             } else {
                 echo "<script type='text/javascript'>if(!alert(\"Error: Could not delete property\")) document.location = 'index.php';</script>";
@@ -238,7 +241,7 @@
               </div>
 
               <div class="col-md-2">
-                <a href="ownerDashboard.php"><div class="btn btn-secondary" style="width: 100%;">Cancel</div></a>
+                <a href="index.php"><div class="btn btn-secondary" style="width: 100%;">Cancel</div></a>
               </div>
             </div> <!-- End Row -->
             <br> <br>
@@ -322,6 +325,6 @@
     function DeleteProperty() {
         document.getElementById("deleteform").submit();
     }
-</script>
+  </script>
 </body>
 </html>
