@@ -109,7 +109,7 @@
                                 } ?>
                          </td>
                          <td><?php echo $row['ID'];?></td>
-                         <td><?php if ($row['ApprovedBy'] == "NULL") {
+                         <td><?php if ($row['ApprovedBy'] == NULL) {
                                     echo "Not Approved";
                                 } else {
                                     echo $row['ApprovedBy'];
