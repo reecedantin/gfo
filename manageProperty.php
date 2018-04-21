@@ -60,11 +60,67 @@
 
            $result = mysqli_query($db,$sql);
 
-           if($result == true) {
+           $deletesql = "DELETE FROM Has WHERE PropertyID = '" . $_POST['id'] . "'";
+           $deleteresult = mysqli_query($db,$deletesql);
+
+           $insertsql = "";
+           $addsqlresult = true;
+
+            if($deleteresult) {
+                if(isset($_POST['currentCrops'])) {
+                    $countupcrops = 0;
+                    for ($i = 0; $i < sizeof($_POST['currentCrops']); $i++) {
+                        $cropName = NULL;
+                        while($cropName == NULL) {
+                            $cropName = $_POST['currentCrops'][$countupcrops];
+                            $countupcrops++;
+                        }
+                        $insertsql = $insertsql . "INSERT INTO Has (PropertyID, ItemName) VALUES ('" . $_POST['id'] . "','" . $cropName . "');";
+                    }
+                }
+
+               if(isset($_POST['currentAnimals'])) {
+                   $countupanimals = 0;
+                   for ($i = 0; $i < sizeof($_POST['currentAnimals']); $i++) {
+                       $animalName = NULL;
+                       while($animalName == NULL) {
+                           $animalName = $_POST['currentAnimals'][$countupanimals];
+                           $countupanimals++;
+                       }
+                       $insertsql = $insertsql . "INSERT INTO Has (PropertyID, ItemName) VALUES ('" . $_POST['id'] . "','" . $animalName . "');";
+                   }
+               }
+               if($insertsql != "") {
+                   $addsqlresult = mysqli_multi_query($db,$insertsql);
+               }
+           }
+
+           echo "<script type='text/javascript'>console.log(\"" . $insertsql . "\");</script>";
+
+           if(!$deleteresult) {
+               echo "<script type='text/javascript'>alert(\"Failed to clear farm items\");</script>";
+           }
+
+           if(!$addsqlresult) {
+               echo "<script type='text/javascript'>alert(\"Failed to add new farm items\");</script>";
+           }
+
+
+           if($result && $deleteresult && $addsqlresult) {
                echo "<script type='text/javascript'>if(!alert(\"Successfully updated property\")) document.location = 'index.php';</script>";
            } else {
                echo "<script type='text/javascript'>if(!alert(\"Error: Could not update property\")) document.location = 'index.php';</script>";
            }
+        }
+
+        if(isset($_POST['requestFormValue']) && isset($_POST['requestFormType']) ) {
+            $sql = "INSERT INTO FarmItem (Name, IsApproved, Type) VALUES ('" . $_POST['requestFormValue'] . "', '0', '" . $_POST['requestFormType'] . "')";
+            $result = mysqli_query($db,$sql);
+            if($result == true) {
+                echo "<script type='text/javascript'>if(!alert(\"Your request is pending admin approval\")) document.location = 'index.php';</script>";
+            } else {
+                echo "<script type='text/javascript'>if(!alert(\"Error: Could not request: " . $_POST['addName'] . "\")) document.location = 'index.php';</script>";
+            }
         }
     }
 ?>
@@ -191,26 +247,34 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6" id="cropsList">
-                            <?php while ($row = mysqli_fetch_array($cropsresult)) { ?>
+                            <?php
+                            $cropCount = 0;
+                            while ($row = mysqli_fetch_array($cropsresult)) { ?>
                               <div class="checkbox">
                                 <label for="currentCrops">
-                                  <input type="checkbox" name="currentCrops" value="<?php echo $row['ItemName']; ?>" checked="checked">
+                                  <input type="checkbox" name="currentCrops<?php echo "[" . $cropCount . "]"; ?>" value="<?php echo $row['ItemName']; ?>" checked="checked">
                                   <?php echo $row['ItemName']; ?>
                                 </label>
                               </div>
-                            <?php } ?>
+                            <?php
+                                $cropCount++;
+                            } ?>
                         </div>
 
                         <?php if(isset($animalresult)) { ?>
                             <div class="col-md-6" id="animalList">
-                                <?php while ($row = mysqli_fetch_array($animalresult)) { ?>
+                                <?php
+                                $animalCount = 0;
+                                while ($row = mysqli_fetch_array($animalresult)) { ?>
                                   <div class="checkbox">
                                     <label for="currentAnimals">
-                                      <input type="checkbox" name="currentAnimals" value="<?php echo $row['ItemName']; ?>" checked="checked">
+                                      <input type="checkbox" name="currentAnimals<?php echo "[" . $animalCount . "]"; ?>" value="<?php echo $row['ItemName']; ?>" checked="checked">
                                       <?php echo $row['ItemName']; ?>
                                     </label>
                                   </div>
-                                <?php } ?>
+                                <?php
+                                    $animalCount++;
+                                } ?>
                             </div>
                         <?php } ?>
                     </div>
@@ -250,14 +314,28 @@
                       </div> <!-- End form group --> <br>
                     <?php } ?>
 
-                    <label class="col-md-12 control-label" for="addCrop">Request Crop Approval</label>
+                    <label class="col-md-12 control-label" for="reqCrop">Request Crop Approval</label>
 
                     <div class="col-md-12 rowspace">
-                      <input id="cropRequest" name="cropRequest" type="text" placeholder="Enter New Crop Name" class="form-control input-md">
+                      <input id="cropRequest" type="text" placeholder="Enter New Crop Name" class="form-control input-md">
+                    </div>
+                    <div class="col-md-12 rowspace">
+                      <select id="cropRequestSelect" class="form-control">
+                          <option value=""></option>
+                          <option value="ANIMAL">ANIMAL</option>
+                          <option value="FRUIT">FRUIT</option>
+                          <option value="FLOWER">FLOWER</option>
+                          <option value="VEGETABLE">VEGETABLE</option>
+                          <option value="NUT">NUT</option>
+                         <!-- <?php while ($row = mysqli_fetch_array($allcropsresult)) { ?>
+                            <option value="<?php echo $row['Name']; ?>"><?php echo $row['Name']; ?></option>
+                         <?php } ?> -->
+
+                      </select>
                     </div>
 
                     <div class="col-md-12">
-                      <button id="cropRequest" type="button" name="addCrop" class="btn btn-primary style-bkg" style="width: 100%;">Submit Request</button>
+                      <button id="cropRequest" type="button" onclick="RequestCrop()" class="btn btn-primary style-bkg" style="width: 100%;">Submit Request</button>
                     </div>
                   <br>
 
@@ -293,20 +371,30 @@
       <input type="hidden" name="delete" value="<?php echo $foundproperty['ID'];?>">
   </form>
 
+  <form action="manageProperty.php" id="requestForm" method="post">
+      <input type="hidden" id="requestFormValue" name="requestFormValue" value="">
+      <input type="hidden" id="requestFormType" name="requestFormType" value="">
+  </form>
+
   <script>
 
     function AddCrop() {
             var selectBox = document.getElementById("cropSelect");
             var cropString = selectBox.options[selectBox.selectedIndex].text;
-
+            if(cropString == "") {
+                return;
+            }
+            var numberOfCrops = 0;
             var checkList = document.getElementById("cropsList");
             var checkListChildren = checkList.childNodes;
             for(var i = 0; i < checkListChildren.length; i++) {
                 if(checkListChildren[i].childNodes.length == 3) {
+                    numberOfCrops++;
                     if(cropString == checkListChildren[i].childNodes[1].children["0"].value) {
                         return;
                     }
                 } else if(checkListChildren[i].childNodes.length == 1){
+                    numberOfCrops++;
                     if(cropString == checkListChildren[i].childNodes[0].children["0"].value) {
                         return;
                     }
@@ -318,7 +406,7 @@
             var label = document.createElement("label");
             var input = document.createElement("input");
             input.type = "checkbox";
-            input.name = "currentCrops";
+            input.name = "currentCrops[" + numberOfCrops + "]";
             input.value = cropString;
             input.checked = "checked";
             label.append(input);
@@ -331,15 +419,20 @@
     function AddAnimal() {
             var selectBox = document.getElementById("animalSelect");
             var animalString = selectBox.options[selectBox.selectedIndex].text;
-
+            if(animalString == "") {
+                return;
+            }
+            var numberOfAnimals = 0;
             var checkList = document.getElementById("animalList");
             var checkListChildren = checkList.childNodes;
             for(var i = 0; i < checkListChildren.length; i++) {
                 if(checkListChildren[i].childNodes.length == 3) {
+                    numberOfAnimals++;
                     if(animalString == checkListChildren[i].childNodes[1].children["0"].value) {
                         return;
                     }
                 } else if(checkListChildren[i].childNodes.length == 1){
+                    numberOfAnimals++;
                     if(animalString == checkListChildren[i].childNodes[0].children["0"].value) {
                         return;
                     }
@@ -351,7 +444,7 @@
             var label = document.createElement("label");
             var input = document.createElement("input");
             input.type = "checkbox";
-            input.name = "currentCrops";
+            input.name = "currentAnimals[" + numberOfAnimals + "]";
             input.value = animalString;
             input.checked = "checked";
             label.append(input);
@@ -363,6 +456,14 @@
 
     function DeleteProperty() {
         document.getElementById("deleteform").submit();
+    }
+
+    function RequestCrop() {
+        if(!(document.getElementById("cropRequest").value == "") && !(document.getElementById("cropRequestSelect").value == "")) {
+            document.getElementById("requestFormValue").value = document.getElementById("cropRequest").value;
+            document.getElementById("requestFormType").value = document.getElementById("cropRequestSelect").value;
+            document.getElementById("requestForm").submit();
+        }
     }
   </script>
 </body>
