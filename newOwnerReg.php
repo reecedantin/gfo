@@ -48,8 +48,9 @@
 ?>
 
 <?php
-        $allcropsresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '0' AND Type != 'ANIMAL'");
-        $allanimalresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '0' AND Type = 'ANIMAL'");
+        $allGARDENcropsresult = mysqli_query($db,"SELECT * FROM FarmItem WHERE IsApproved = '1' AND (Type = 'VEGETABLE' OR Type = 'FLOWER')");
+        $allORCHARDcropsresult = mysqli_query($db,"SELECT * FROM FarmItem WHERE IsApproved = '1' AND (Type = 'FRUIT' OR Type = 'NUT')");
+        $allanimalresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '1' AND Type = 'ANIMAL'");
 ?>
 
 <!DOCTYPE html>
@@ -148,8 +149,11 @@
                 <div class="col-md-4">
                   <select id="cropSelect" name="crop" class="form-control">
                     <option value="">Crop</option>
-                    <?php while ($row = mysqli_fetch_array($allcropsresult)) { ?>
-                       <option value="<?php echo $row['Name']; ?>"><?php echo $row['Name']; ?></option>
+                    <?php while ($row = mysqli_fetch_array($allGARDENcropsresult)) { ?>
+                       <option class="allGardenCrops" value="<?php echo $row['Name']; ?>"><?php echo $row['Name']; ?></option>
+                    <?php } ?>
+                    <?php while ($row = mysqli_fetch_array($allORCHARDcropsresult)) { ?>
+                       <option class="allOrchardCrops" value="<?php echo $row['Name']; ?>"><?php echo $row['Name']; ?></option>
                     <?php } ?>
                   </select>
                 </div>
@@ -204,19 +208,19 @@
     function RegisterUser() {
         validateForm();
         var propertySelect = document.getElementById("propertyType");
-        if(propertySelect.options[propertySelect.selectedIndex].text == "") {
+        if(propertySelect.options[propertySelect.selectedIndex].text == "Property Type") {
             alert("You must select a property type");
             return;
         } else if (propertySelect.options[propertySelect.selectedIndex].text == "Farm") {
             var animalSelect = document.getElementById("animalSelect");
-            if(animalSelect.options[animalSelect.selectedIndex].text == "") {
+            if(animalSelect.options[animalSelect.selectedIndex].text == "Animal") {
                 alert("You must select an animal");
                 return;
             }
         }
 
         var cropSelect = document.getElementById("cropSelect");
-        if(cropSelect.options[cropSelect.selectedIndex].text == "") {
+        if(cropSelect.options[cropSelect.selectedIndex].text == "Crop") {
             alert("You must select a crop");
             return;
         }
@@ -239,13 +243,36 @@
     function FarmTypeChanged() {
         var propertySelect = document.getElementById("propertyType");
         var animalSelect = document.getElementById("animalSelect");
-        var animalLabel = document.getElementById("animalLabel");
+        var cropSelect = document.getElementById("cropSelect");
+        var allgardenOptions = document.getElementsByClassName("allGardenCrops");
+        var allorchardOptions = document.getElementsByClassName("allOrchardCrops");
+
+        cropSelect.selectedIndex = 0;
+        animalSelect.selectedIndex = 0;
         if(propertySelect.options[propertySelect.selectedIndex].text == "Farm") {
+            for(var i = 0; i < allorchardOptions.length; i++) {
+                allorchardOptions[i].hidden = false;
+            }
+            for(var i = 0; i < allgardenOptions.length; i++) {
+                allgardenOptions[i].hidden = false;
+            }
             animalSelect.hidden = false;
-            animalLabel.hidden = false;
-        } else {
+        } else if(propertySelect.options[propertySelect.selectedIndex].text == "Garden") {
+            for(var i = 0; i < allorchardOptions.length; i++) {
+                allorchardOptions[i].hidden = true;
+            }
+            for(var i = 0; i < allgardenOptions.length; i++) {
+                allgardenOptions[i].hidden = false;
+            }
             animalSelect.hidden = true;
-            animalLabel.hidden = true;
+        } else if(propertySelect.options[propertySelect.selectedIndex].text == "Orchard") {
+            for(var i = 0; i < allorchardOptions.length; i++) {
+                allorchardOptions[i].hidden = false;
+            }
+            for(var i = 0; i < allgardenOptions.length; i++) {
+                allgardenOptions[i].hidden = true;
+            }
+            animalSelect.hidden = true;
         }
     }
 
@@ -258,6 +285,8 @@
             return false;
         }
     }
+
+    FarmTypeChanged();
 </script>
 </body>
 </html>

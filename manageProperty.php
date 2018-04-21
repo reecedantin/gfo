@@ -141,8 +141,18 @@
 
     if($count == 1) {
         $cropsresult = mysqli_query($db, "SELECT * FROM Has WHERE PropertyID = '" . $foundproperty['ID'] . "' AND ItemName NOT IN (SELECT Name FROM FarmItem WHERE Type = 'ANIMAL')");
-        $allcropsresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '0' AND Type != 'ANIMAL'");
-        $allanimalresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '0' AND Type = 'ANIMAL'");
+
+        $allcropssql = "SELECT * FROM FarmItem WHERE IsApproved = '1' AND Type != 'ANIMAL'";
+
+        $allanimalresult = mysqli_query($db, "SELECT * FROM FarmItem WHERE IsApproved = '1' AND Type = 'ANIMAL'");
+
+        if($foundproperty['PropertyType'] == "GARDEN") {
+            $allcropssql = "SELECT * FROM FarmItem WHERE IsApproved = '1' AND (Type = 'VEGETABLE' OR Type = 'FLOWER')";
+        } else if($foundproperty['PropertyType'] == "ORCHARD") {
+            $allcropssql = "SELECT * FROM FarmItem WHERE IsApproved = '1' AND (Type = 'FRUIT' OR Type = 'NUT')";
+        }
+
+        $allcropsresult = mysqli_query($db, $allcropssql);
 
         if($foundproperty['PropertyType'] == "FARM") {
             $animalresult = mysqli_query($db, "SELECT * FROM Has WHERE PropertyID = '" . $foundproperty['ID'] . "' AND ItemName IN (SELECT Name FROM FarmItem WHERE Type = 'ANIMAL')");
