@@ -139,7 +139,7 @@ if($_SESSION['user_type'] != "ADMIN") {
               <tbody>
                   <?php while ($row = mysqli_fetch_array($approvedItems)) { ?>
                   <tr>
-                    <td class="link-color"><a href=<?php echo "approvedEntities.php?deleteName=" . $row['Name'];?>>Delete</a></td>
+                    <td class="link-color"><a href=<?php echo "\"approvedEntities.php?deleteName=" . $row['Name'] . "\"";?>>Delete</a></td>
                     <td><?php echo $row['Name']; ?></td>
                     <td><?php echo $row['Type']; ?></td>
                   </tr>
