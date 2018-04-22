@@ -5,10 +5,10 @@
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // username and password sent from form
 
-      $myusername = mysqli_real_escape_string($db,$_POST['username']);
+      $myemail = mysqli_real_escape_string($db,$_POST['email']);
       $mypassword = mysqli_real_escape_string($db,$_POST['password']);
 
-      $sql = "SELECT * FROM User WHERE Username = '$myusername' and Password = '" . md5($mypassword) . "'";
+      $sql = "SELECT * FROM User WHERE Email = '$myemail' and Password = '" . md5($mypassword) . "'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       $usertype = $row['UserType'];
@@ -18,8 +18,7 @@
       // If result matched $myusername and $mypassword, table row must be 1 row
 
       if($count == 1) {
-         //session_register("myusername");
-         $_SESSION['login_user'] = $myusername;
+         $_SESSION['login_user'] = $row['Username'];
          $_SESSION['user_type'] = $usertype;
          if($usertype == "ADMIN") {
              header("Location: adminDashboard.php");
@@ -66,7 +65,7 @@
               <!-- Text input-->
               <div class="form-group">
                 <div class="col-md-12">
-                  <input id="username" name="username" type="text" placeholder="Username" class="form-control input-md" required="">
+                  <input id="email" name="email" type="text" placeholder="Email" class="form-control input-md" required="">
                 </div>
               </div>
 
