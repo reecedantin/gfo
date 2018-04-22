@@ -53,6 +53,7 @@
                Zip = '" . $_POST['zip'] . "',
                Size = '" . $_POST['size'] . "',
                IsPublic = '" . $ispublic . "',
+               ApprovedBy = NULL,
                IsCommercial = '" . $iscommercial . "' WHERE ID = '" . $_POST['id'] . "' AND Owner = '" . $_SESSION['login_user'] . "'";
 
            } else if($_SESSION['user_type'] == 'ADMIN') {
