@@ -12,15 +12,19 @@
            $sql = "DELETE FROM User WHERE Username = '" . $_GET['deleteUser'] . "'";
            $result = mysqli_query($db,$sql);
 
-           if($result == true) {
+           $logssql = "DELETE FROM Visit WHERE Username = '" . $_GET['deleteUser'] . "'";
+           $logsresult = mysqli_query($db,$logssql);
+
+           if($result && $logsresult) {
                echo "<script type='text/javascript'>if(!alert(\"Successfully deleted user: " . $_GET['deleteUser'] . "\")) document.location = 'visitorList.php';</script>";
            } else {
-               echo "<script type='text/javascript'>if(!alert(\"Error: Could not delete user: " . $_GET['deleteUser'] . "\")) document.location = 'visitorList.php';</script>";
+               echo "<script type='text/javascript'>if(!alert(\"Error deleting user: " . $_GET['deleteUser'] . "\")) document.location = 'visitorList.php';</script>";
            }
+
        } else if(isset($_GET['deleteLogs'])) {
            $sql = "DELETE FROM Visit WHERE Username = '" . $_GET['deleteLogs'] . "'";
            $result = mysqli_query($db,$sql);
-           print $result;
+
            if($result == true) {
                echo "<script type='text/javascript'>if(!alert(\"Successfully deleted logs for user: " . $_GET['deleteLogs'] . "\")) document.location = 'visitorList.php';</script>";
            } else {
