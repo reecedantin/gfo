@@ -6,43 +6,56 @@
       $sql = "INSERT INTO User (Username, Email, Password, UserType) VALUES ('" . $_POST['username'] . "', '" . $_POST['email'] . "', '" . md5($_POST['password']) . "', 'OWNER' )";
       $result = mysqli_query($db,$sql);
 
-      $ispublic = ($_POST['public'] == "true");
-      $iscommercial = ($_POST['commercial'] == "true");
+      if($result) {
+          $ispublic = ($_POST['public'] == "true");
+          $iscommercial = ($_POST['commercial'] == "true");
 
-      $nextIDresult = mysqli_query($db, "SELECT COUNT(*) FROM Property");
-      $nextIDrow = mysqli_fetch_array($nextIDresult);
-      $nextID = $nextIDrow['COUNT(*)'];
+          $nextIDresult = mysqli_query($db, "SELECT MAX(ID) FROM Property");
+          $nextIDrow = mysqli_fetch_array($nextIDresult);
+          $nextID = $nextIDrow['MAX(ID)'] + 1;
 
-      $sql = "INSERT INTO Property (ID, Name, Size, IsCommercial, IsPublic, Street, City, Zip, PropertyType, Owner) VALUES (
-      '" . $nextID . "',
-      '" . $_POST['propertyName'] . "',
-      '" . $_POST['size'] . "',
-      '" . $iscommercial . "',
-      '" . $ispublic . "',
-      '" . $_POST['streetAddress'] . "',
-      '" . $_POST['city'] . "',
-      '" . $_POST['zip'] . "',
-      '" . strtoupper($_POST['type']) . "',
-      '" . $_POST['username'] . "')";
+          $sql = "INSERT INTO Property (ID, Name, Size, IsCommercial, IsPublic, Street, City, Zip, PropertyType, Owner) VALUES (
+          '" . $nextID . "',
+          '" . $_POST['propertyName'] . "',
+          '" . $_POST['size'] . "',
+          '" . $iscommercial . "',
+          '" . $ispublic . "',
+          '" . $_POST['streetAddress'] . "',
+          '" . $_POST['city'] . "',
+          '" . $_POST['zip'] . "',
+          '" . strtoupper($_POST['type']) . "',
+          '" . $_POST['username'] . "')";
 
-      $resultone = mysqli_query($db,$sql);
+          $resultproperty = mysqli_query($db,$sql);
 
-      $resulttwo = true;
+          if($resultproperty) {
+              $resultanimals = true;
 
-      if($_POST['type'] == "farm") {
-          $animalsql = "INSERT INTO Has (PropertyID, ItemName) VALUES ('" . $nextID . "','" . $_POST['animal'] . "')";
-          $resulttwo = mysqli_query($db, $animalsql);
-      }
+              if($_POST['type'] == "farm") {
+                  $animalsql = "INSERT INTO Has (PropertyID, ItemName) VALUES ('" . $nextID . "','" . $_POST['animal'] . "')";
+                  $resulttwo = mysqli_query($db, $animalsql);
+              }
 
-      $cropsql = "INSERT INTO Has (PropertyID, ItemName) VALUES ('" . $nextID . "','" . $_POST['crop'] . "')";
-      $resultthree = mysqli_query($db, $cropsql);
+              $cropsql = "INSERT INTO Has (PropertyID, ItemName) VALUES ('" . $nextID . "','" . $_POST['crop'] . "')";
+              $resultcrops = mysqli_query($db, $cropsql);
 
-      if($result == true) {
-         $_SESSION['login_user'] = $_POST['username'];
-         $_SESSION['user_type'] = 'OWNER';
-         header("Location: ownerDashboard.php");
+              if($resultanimals && $resultcrops) {
+                 $_SESSION['login_user'] = $_POST['username'];
+                 $_SESSION['user_type'] = 'OWNER';
+                 header("Location: ownerDashboard.php");
+              } else {
+                 $_SESSION['login_user'] = $_POST['username'];
+                 $_SESSION['user_type'] = 'OWNER';
+                 echo "<script type='text/javascript'>if(!alert('There was an error adding items')) document.location = 'ownerDashboard.php';</script>";
+
+              }
+          } else {
+              $_SESSION['login_user'] = $_POST['username'];
+              $_SESSION['user_type'] = 'OWNER';
+              echo "<script type='text/javascript'>if(!alert('There was an error adding the property, user has been created without a property')) document.location = 'ownerDashboard.php';</script>";
+          }
       } else {
-         echo "<script type='text/javascript'>alert('There was an error creating the account');</script>";
+          echo "<script type='text/javascript'>alert('Could not create the user (username already taken)');</script>";
       }
    }
 ?>
@@ -206,37 +219,55 @@
 </section>
 <script>
     function RegisterUser() {
-        validateForm();
+        console.log("clicked button")
+        if(!validateForm()) {
+            console.log("form invalid")
+            return false;
+        }
+
+        if(document.getElementById("propertyName").value == "" ||
+           document.getElementById("streetAddress").value == "" ||
+           document.getElementById("city").value == "" ||
+           document.getElementById("zip").value == "" ||
+           document.getElementById("size").value == "") {
+               alert("Error: Please fill in all boxes");
+               return false;
+           }
+
+
+
+
+
         var propertySelect = document.getElementById("propertyType");
         if(propertySelect.options[propertySelect.selectedIndex].text == "Property Type") {
             alert("You must select a property type");
-            return;
+            return false;
         } else if (propertySelect.options[propertySelect.selectedIndex].text == "Farm") {
             var animalSelect = document.getElementById("animalSelect");
             if(animalSelect.options[animalSelect.selectedIndex].text == "Animal") {
                 alert("You must select an animal");
-                return;
+                return false;
             }
         }
 
         var cropSelect = document.getElementById("cropSelect");
         if(cropSelect.options[cropSelect.selectedIndex].text == "Crop") {
             alert("You must select a crop");
-            return;
+            return false;
         }
 
         var public = document.getElementById("public");
-        if(public.options[public.selectedIndex].text == "") {
+        if(public.options[public.selectedIndex].text == "Public?") {
             alert("You must change the public parameter.");
-            return;
+            return false;
         }
 
         var commercial = document.getElementById("commercial");
-        if(commercial.options[commercial.selectedIndex].text == "") {
+        if(commercial.options[commercial.selectedIndex].text == "Commercial?") {
             alert("You must change the commercial parameter.");
-            return;
+            return false;
         }
-
+        console.log("create owner")
         document.getElementById("newOwnerForm").submit();
     }
 
@@ -284,6 +315,27 @@
             alert("Passwords must match");
             return false;
         }
+
+        if (x.length < 8) {
+            alert("Passwords must have at least 8 characters");
+            return false;
+        }
+
+        var email = document.forms["newOwnerForm"]["email"].value;
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if(!re.test(String(email).toLowerCase())) {
+            alert("Email must be a valid email address");
+            return false;
+        }
+
+        var username = document.forms["newOwnerForm"]["username"].value;
+        if(username == "") {
+            alert("Username cannot be empty");
+            return false;
+        }
+
+        return true;
+
     }
 
     FarmTypeChanged();
