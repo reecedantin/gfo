@@ -6,9 +6,9 @@
        $ispublic = ($_POST['public'] == "true");
        $iscommercial = ($_POST['commercial'] == "true");
 
-       $nextIDresult = mysqli_query($db, "SELECT COUNT(*) FROM Property");
+       $nextIDresult = mysqli_query($db, "SELECT MAX(ID) FROM Property");
        $nextIDrow = mysqli_fetch_array($nextIDresult);
-       $nextID = $nextIDrow['COUNT(*)'];
+       $nextID = $nextIDrow['MAX(ID)'] + 1;
 
        $sql = "INSERT INTO Property (ID, Name, Size, IsCommercial, IsPublic, Street, City, Zip, PropertyType, Owner) VALUES (
        '" . $nextID . "',
@@ -261,8 +261,6 @@
             animalLabel.hidden = true;
         }
     }
-
-    FarmTypeChanged();
   </script>
 </body>
 </html>
