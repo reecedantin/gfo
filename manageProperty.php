@@ -31,6 +31,15 @@
         }
 
         if(isset($_POST['id'])) {
+            if($_POST['type'] == "FARM" && !isset($_POST['currentAnimals'])) {
+                echo "<script type='text/javascript'>if(!alert(\"Error: Farms must have one animal and one crop\")) document.location = 'manageProperty.php?id=" . $_POST['id'] . "';</script>";
+                return;
+            }
+
+            if(!isset($_POST['currentCrops'])) {
+                echo "<script type='text/javascript'>if(!alert(\"Error: Properties must have at least one crop\")) document.location = 'manageProperty.php?id=" . $_POST['id'] . "';</script>";
+                return;
+            }
            $ispublic = ($_POST['public'] == "true");
            $iscommercial = ($_POST['commercial'] == "true");
 
@@ -60,8 +69,13 @@
 
            $result = mysqli_query($db,$sql);
 
-           $deletesql = "DELETE FROM Has WHERE PropertyID = '" . $_POST['id'] . "'";
-           $deleteresult = mysqli_query($db,$deletesql);
+           $deleteresult = false;
+
+           if($result) {
+               $deletesql = "DELETE FROM Has WHERE PropertyID = '" . $_POST['id'] . "'";
+               $deleteresult = mysqli_query($db,$deletesql);
+           }
+
 
            $insertsql = "";
            $addsqlresult = true;
@@ -94,8 +108,6 @@
                    $addsqlresult = mysqli_multi_query($db,$insertsql);
                }
            }
-
-           echo "<script type='text/javascript'>console.log(\"" . $insertsql . "\");</script>";
 
            if(!$deleteresult) {
                echo "<script type='text/javascript'>alert(\"Failed to clear farm items\");</script>";
@@ -216,6 +228,7 @@
                   <label class="col-md-12 control-label" for="type">Type*</label>
                   <div class="col-md-12">
                     <input id="type" name="type" type="text" placeholder="Type" class="form-control input-md" value="<?php echo $foundproperty['PropertyType'];?>" disabled>
+                    <input type="hidden" name="type" value="<?php echo $foundproperty['PropertyType'];?>">
                   </div> <br>
 
                   <label class="col-md-12 control-label" for="public">Public*</label>
