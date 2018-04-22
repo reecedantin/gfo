@@ -70,6 +70,13 @@
 
            $result = mysqli_query($db,$sql);
 
+           $deletelogsresult = false;
+
+           if($result) {
+               $deletelogssql = "DELETE FROM Visit WHERE PropertyID = '" . $_POST['id'] . "'";
+               $deletelogsresult = mysqli_query($db, $deletelogssql);
+           }
+
            $deleteresult = false;
 
            if($result) {
@@ -119,7 +126,7 @@
            }
 
 
-           if($result && $deleteresult && $addsqlresult) {
+           if($result && $deleteresult && $addsqlresult && $deletelogsresult) {
                echo "<script type='text/javascript'>if(!alert(\"Successfully updated property\")) document.location = 'index.php';</script>";
            } else {
                echo "<script type='text/javascript'>if(!alert(\"Error: Could not update property\")) document.location = 'index.php';</script>";
