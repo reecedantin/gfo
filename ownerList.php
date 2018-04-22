@@ -10,12 +10,26 @@
     if($_SERVER["REQUEST_METHOD"] == "GET") {
        // username and password sent from form
        if(isset($_GET['username'])) {
+           $propertiessql = "SELECT ID FROM Property WHERE Owner = '" . $_GET['username'] . "'";
+           $propertiesresult = mysqli_query($db,$propertiessql);
+
+           $deleteresult = true;
+
+           while ($row = mysqli_fetch_array($propertiesresult)) {
+               $deletesql = "DELETE FROM Has WHERE PropertyID = '" . $row['ID'] . "'";
+               $deleteresult = ($deleteresult && mysqli_query($db, $deletesql));
+           }
+
+           $deletepropertiessql = "DELETE FROM Property WHERE Owner = '" . $_GET['username'] . "'";
+           $deletepropertiesresult = mysqli_query($db, $deletepropertiessql);
+
            $sql = "DELETE FROM User WHERE Username = '" . $_GET['username'] . "'";
-           $result = mysqli_query($db,$sql);
-           if($result == true) {
+           $result = mysqli_query($db, $sql);
+
+           if($result && $deleteresult && $deletepropertiesresult) {
                echo "<script type='text/javascript'>if(!alert(\"Successfully deleted user: " . $_GET['username'] . "\")) document.location = 'ownerList.php';</script>";
            } else {
-               echo "<script type='text/javascript'>if(!alert(\"Error: Could not delete user: " . $_GET['username'] . "\")) document.location = 'ownerList.php';</script>";
+               echo "<script type='text/javascript'>if(!alert(\"Error: Could not delete user: " . $_GET['username'] . " Deleted properties: " . $deleteresult . " Deleted user: " . $result . "\")) document.location = 'ownerList.php';</script>";
            }
        }
    }
