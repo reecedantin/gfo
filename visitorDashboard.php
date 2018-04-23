@@ -306,7 +306,7 @@ if($_SESSION['user_type'] != "VISITOR") {
                 }
                 if (isset($_GET['searchRatingFrom']) && $_GET['searchRatingFrom'] != NULL) {
                     $ratingto = mysqli_real_escape_string($db, (isset($_GET['searchRatingTo'])) ? $_GET['searchRatingTo'] : $_GET['searchRatingFrom']);
-                    $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING AVG(Rating) >= " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " AND AVG(Rating) <= " . $ratingto . ")";
+                    $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING AVG(Rating) >= " . mysqli_real_escape_string($db, $_GET['searchRatingFrom']) . " AND AVG(Rating) <= " . $ratingto . ")";
                 }
             }
             $query .= " ORDER BY Name";
