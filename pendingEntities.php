@@ -79,7 +79,7 @@ if($_SESSION['user_type'] != "ADMIN") {
 
               <div class="row rowspace">
 
-                <div class="col-md-6">
+                <div class="col-md-6 offset-md-3">
                   <select id="Type" name="Type" class="form-control">
                     <option value="0">Type?</option>
                     <option value="ANIMAL">Animal</option>
