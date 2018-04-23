@@ -12,18 +12,8 @@ if($_SESSION['user_type'] != "VISITOR") {
 
 <body>
 
-  <script type="text/javascript">
-    var options = ["Chinese","Indian"];     
-
-    for(var i = 0; i < options.length; i++) {
-      var opt = document.createElement('option');
-      opt.innerHTML = options[i];
-      opt.value = options[i];
-      document.getElementById('selectCateg').appendChild(opt);
-    }
-  </script>
-
   <?php include("navbar.php"); ?>
+
   <section>
     <div class="container">
 
@@ -47,11 +37,11 @@ if($_SESSION['user_type'] != "VISITOR") {
         </div> 
 
         <div class="collapse" id="collapseExample">
-          <form class="form-horizontal" action="visitorDashboard.php" method = "GET">
+          <form class="form-horizontal">
             <fieldset>
 
               <br>
-              <input id="SEARCH" name="SEARCH" value="true" type = "hidden">
+
               <div class="row rowspace">
                 <!-- Select Basic -->
                 <div class="col-md-2 offset-md-3">
@@ -60,7 +50,7 @@ if($_SESSION['user_type'] != "VISITOR") {
 
                 <!-- Search input-->
                 <div class="col-md-4">
-                  <input id="inputName" name="inputName" type="search" placeholder="Search Name" class="form-control input-md">
+                  <input id="nameInput" name="nameInput" type="search" placeholder="Search Name" class="form-control input-md">
                 </div>
 
               </div> <!-- End Row -->
@@ -73,20 +63,7 @@ if($_SESSION['user_type'] != "VISITOR") {
 
                 <!-- Search input-->
                 <div class="col-md-4">
-                  <input id="inputStreet" name="inputStreet" type="search" placeholder="Search Street" class="form-control input-md">
-                </div>
-
-              </div> <!-- End Row -->
-
-              <div class="row rowspace">
-                <!-- Select Basic -->
-                <div class="col-md-2 offset-md-3">
-                  <p>Search City</p>
-                </div>
-
-                <!-- Search input-->
-                <div class="col-md-4">
-                  <input id="inputCity" name="inputCity" type="search" placeholder="Search City" class="form-control input-md">
+                  <input id="searchinput" name="searchinput" type="search" placeholder="Search Street" class="form-control input-md">
                 </div>
 
               </div> <!-- End Row -->
@@ -196,25 +173,25 @@ if($_SESSION['user_type'] != "VISITOR") {
                 <div class="col-md-2 offset-md-3">
                   <select id="isPublic" name="isPublic" class="form-control">
                     <option value="2">Public?</option>
-                    <option value="1">True</option>
-                    <option value="0">False</option>
+                    <option value="0">True</option>
+                    <option value="1">False</option>
                   </select>
                 </div>
 
                 <div class="col-md-2">
-                  <select id="isCommercial" name="isCommercial" class="form-control">
+                  <select id="IsCommercial" name="IsCommercial" class="form-control">
                     <option value="2">Commercial?</option>
-                    <option value="1">True</option>
-                    <option value="0">False</option>
+                    <option value="0">True</option>
+                    <option value="1">False</option>
                   </select>
                 </div>
 
                 <div class="col-md-2">
-                  <select id="PropertyType" name="PropertyType" class="form-control">
+                  <select id="IsCommercial" name="IsCommercial" class="form-control">
                     <option value="0">Type?</option>
-                    <option value="GARDEN">Garden</option>
-                    <option value="ORCHARD">Orchard</option>
-                    <option value="FARM">Farm</option>
+                    <option value="1">Garden</option>
+                    <option value="2">Orchard</option>
+                    <option value="3">Farm</option>
                   </select>
                 </div>
 
@@ -266,52 +243,7 @@ if($_SESSION['user_type'] != "VISITOR") {
 
 
             <?php
-            $query = "SELECT * FROM Property WHERE ApprovedBy IS NOT NULL";
-            if (isset($_GET['SEARCH'])) {
-                if (isset($_GET['inputName']) && $_GET['inputName'] != NULL) {
-                  $query .= " AND Name LIKE '%" . mysqli_real_escape_string($db, $_GET['inputName']) . "%'";
-                }
-                if (isset($_GET['inputCity']) && $_GET['inputCity'] != NULL) {
-                  $query .= " AND City LIKE '%" . mysqli_real_escape_string($db, $_GET['inputCity']) . "%'";
-                }
-                if (isset($_GET['inputStreet']) && $_GET['inputStreet'] != NULL) {
-                  $query .= " AND Street LIKE '%" . mysqli_real_escape_string($db, $_GET['inputStreet']) . "%'";
-                }
-                if (isset($_GET['searchApprovedBy']) && $_GET['searchApprovedBy'] != NULL) {
-                  $query .= " AND ApprovedBy LIKE '%" . mysqli_real_escape_string($db, $_GET['searchApprovedBy']) . "%'";
-                }
-                if ($_GET['isCommercial'] != 2) {
-                   $query .= " AND isCommercial = " . $_GET['isCommercial'];
-                }
-                if ($_GET['isPublic'] != 2) {
-                   $query .= " AND isPublic = " . $_GET['isPublic'];
-                }
-                if ($_GET['PropertyType'] != 0) {
-                   $query .= " AND PropertyType = '" . $_GET['PropertyType'] . "'";
-                }
-                if (isset($_GET['searchZip']) && $_GET['searchZip'] != NULL) {
-                    $query .= " AND Zip = " . mysqli_real_escape_string($db, $_GET['searchZip']);
-                }
-                if (isset($_GET['searchSizeFrom']) && $_GET['searchSizeFrom'] != NULL) {
-                    $sizeto = mysqli_real_escape_string($db, (isset($_GET['searchSizeTo'])) ? $_GET['searchSizeTo'] : $_GET['searchSizeFrom']);
-                    $query .= " AND Size >= " . mysqli_real_escape_string($db, $_GET['searchSizeFrom']) . " AND Size <= " . $sizeto;
-                }
-                if (isset($_GET['searchIdFrom']) && $_GET['searchIdFrom'] != NULL) {
-                    $idto = mysqli_real_escape_string($db, (isset($_GET['searchIdTo'])) ? $_GET['searchIdTo'] : $_GET['searchIdFrom']);
-                    $query .= " AND ID >= " . mysqli_real_escape_string($db, $_GET['searchIdFrom']) . " AND ID <= " . $idto;
-                }
-                if (isset($_GET['searchVisitsFrom']) && $_GET['searchVisitsFrom'] != NULL) {
-                    $visitto = mysqli_real_escape_string($db, (isset($_GET['searchVisitsTo'])) ? $_GET['searchVisitsTo'] : $_GET['searchVisitFrom']);
-                    $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING COUNT(PropertyID) >= " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " AND COUNT(PropertyID) <= " . $visitto . ")";
-                }
-                if (isset($_GET['searchRatingFrom']) && $_GET['searchRatingFrom'] != NULL) {
-                    $ratingto = mysqli_real_escape_string($db, (isset($_GET['searchRatingTo'])) ? $_GET['searchRatingTo'] : $_GET['searchRatingFrom']);
-                    $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING AVG(Rating) >= " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " AND AVG(Rating) <= " . $ratingto . ")";
-                }
-            }
-            $query .= " ORDER BY Name";
-            //echo "<br>" . $query . "<br>";
-            $result = mysqli_query($db, $query);
+            $result = mysqli_query($db, "SELECT * FROM Property WHERE ApprovedBy != 'NULL';");
             while ($row = mysqli_fetch_array($result)) {?>
             <tr>
              <td class="link-color"><a href=<?php echo "propertyDetails.php?id=" . $row['ID'];?>><?php echo $row['Name'];?></a></td>

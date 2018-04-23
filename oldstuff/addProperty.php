@@ -6,9 +6,9 @@
        $ispublic = ($_POST['public'] == "true");
        $iscommercial = ($_POST['commercial'] == "true");
 
-       $nextIDresult = mysqli_query($db, "SELECT MIN(ID)+1 ID FROM Property t WHERE NOT EXISTS (SELECT ID FROM Property WHERE ID = t.ID+1)");
+       $nextIDresult = mysqli_query($db, "SELECT MAX(ID) FROM Property");
        $nextIDrow = mysqli_fetch_array($nextIDresult);
-       $nextID = $nextIDrow['ID'];
+       $nextID = $nextIDrow['MAX(ID)'] + 1;
 
        $sql = "INSERT INTO Property (ID, Name, Size, IsCommercial, IsPublic, Street, City, Zip, PropertyType, Owner) VALUES (
        '" . $nextID . "',
