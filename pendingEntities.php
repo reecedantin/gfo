@@ -25,8 +25,7 @@ if($_SESSION['user_type'] != "ADMIN") {
         }
     }
 
-    $unapprovedItemsql = "SELECT * FROM FarmItem WHERE IsApproved = '0'";
-    $unapprovedItems = mysqli_query($db, $unapprovedItemsql);
+    
  ?>
 
 <!DOCTYPE html>
@@ -51,33 +50,64 @@ if($_SESSION['user_type'] != "ADMIN") {
       <div class ="row">
         <div class = "col-md-12">
 
-          <form class="form-horizontal">
+          <div class="text-center">
+
+           <button class="btn btn-primary style-bkg" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            &#x1f50d Search Table
+          </button>
+
+        </div> 
+
+        <div class="collapse" id="collapseExample">
+          <form class="form-horizontal" action="pendingEntities.php" method = "GET">
             <fieldset>
 
-              <div class="row">
-
+              <br>
+              <input id="SEARCH" name="SEARCH" value="true" type = "hidden">
+              <div class="row rowspace">
                 <!-- Select Basic -->
-                <div class="col-md-3">
-                  <select id="selectbasic" name="selectbasic" class="form-control">
-                    <option value="1">Search by...</option>
-                    <option value="2">Option two</option>
-                  </select>
+                <div class="col-md-2 offset-md-3">
+                  <p>Search name</p>
                 </div>
 
                 <!-- Search input-->
-                <div class="col-md-7">
-                  <input id="searchinput" name="searchinput" type="search" placeholder="Search Animals/Crops" class="form-control input-md">
-                </div>
-
-                <!-- Submit Button -->
-                <div class="col-md-2">
-                  <input class="btn btn-primary style-bkg" type="submit" value="Search Animals/Crops">
+                <div class="col-md-4">
+                  <input id="inputName" name="inputName" type="search" placeholder="Search Name" class="form-control input-md">
                 </div>
 
               </div> <!-- End Row -->
 
-            </fieldset>
-          </form>
+              <div class="row rowspace">
+
+                <div class="col-md-6">
+                  <select id="Type" name="Type" class="form-control">
+                    <option value="0">Type?</option>
+                    <option value="ANIMAL">Animal</option>
+                    <option value="FRUIT">Fruit</option>
+                    <option value="FLOWER">Flower</option>
+                    <option value="VEGETABLE">Vegetable</option>
+                    <option value="NUT">Nut</option>
+                  </select>
+                </div>
+
+              </div> <!-- End Row -->  
+
+              
+            <br>
+
+              <div class="row">
+
+                <!-- Submit Button -->
+                <div class="col-md-6 offset-md-5">
+                 <input class="btn btn-primary style-bkg btn-md" type="submit"  width="100%" value="Search Entities">
+               </div>
+
+             </div> 
+
+           </fieldset>
+         </form>
+
+       </div> <!-- End Collapse Example -->
 
         </div> <!-- End Column -->
       </div> <!-- End Row -->
@@ -98,7 +128,20 @@ if($_SESSION['user_type'] != "ADMIN") {
                 </tr>
               </thead>
               <tbody>
-                  <?php while ($row = mysqli_fetch_array($unapprovedItems)) { ?>
+                  <?php 
+                  $query = "SELECT * FROM FarmItem WHERE IsApproved = '0'";
+                  if (isset($_GET['SEARCH'])) {
+                    if (isset($_GET['inputName']) && $_GET['inputName'] != NULL) {
+                      $query .= " AND Name LIKE '%" . mysqli_real_escape_string($db, $_GET['inputName']) . "%'";
+                    }
+                    if (isset($_GET['Type']) && $_GET['Type'] != '0') {
+                      $query .= " AND Type = '" . mysqli_real_escape_string($db, $_GET['Type']) . "'";
+                    }
+                  }
+                  $query .= " ORDER BY Name";
+                  //echo "<br>" . $query . "<br>";
+                  $unapprovedItems = mysqli_query($db, $query);
+                  while ($row = mysqli_fetch_array($unapprovedItems)) { ?>
                   <tr>
                     <td class="link-color"><a href=<?php echo "\"pendingEntities.php?deleteName=" . $row['Name'] . "\"";?>>Delete</a></td>
                     <td class="link-color"><a href=<?php echo "\"pendingEntities.php?approveName=" . $row['Name'] . "\"";?>>Approve</a></td>

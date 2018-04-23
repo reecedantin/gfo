@@ -54,37 +54,83 @@
         </div>
       </div> <!-- End Row -->
 
-      <div class ="row">
+            <div class ="row">
         <div class = "col-md-12">
 
-          <form class="form-horizontal">
+          <div class="text-center">
+
+           <button class="btn btn-primary style-bkg" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            &#x1f50d Search Table
+          </button>
+
+        </div> 
+
+        <div class="collapse" id="collapseExample">
+          <form class="form-horizontal" action="ownerList.php" method = "GET">
             <fieldset>
 
-              <div class="row">
-
+              <br>
+              <input id="SEARCH" name="SEARCH" value="true" type = "hidden">
+              <div class="row rowspace">
                 <!-- Select Basic -->
-                <div class="col-md-3">
-                  <select id="selectbasic" name="selectbasic" class="form-control">
-                    <option value="1">Search by...</option>
-                    <option value="2">Option two</option>
-                  </select>
+                <div class="col-md-2 offset-md-3">
+                  <p>Search Username</p>
                 </div>
 
                 <!-- Search input-->
-                <div class="col-md-7">
-                  <input id="searchinput" name="searchinput" type="search" placeholder="Search Owners" class="form-control input-md">
-                </div>
-
-                <!-- Submit Button -->
-                <div class="col-md-2">
-                  <input class="btn btn-primary style-bkg" type="submit" value="Search Owners">
+                <div class="col-md-4">
+                  <input id="inputUsername" name="inputUsername" type="search" placeholder="Search Username" class="form-control input-md">
                 </div>
 
               </div> <!-- End Row -->
 
-            </fieldset>
-          </form>
+              <div class="row rowspace">
+                <!-- Select Basic -->
+                <div class="col-md-2 offset-md-3">
+                  <p>Search Email</p>
+                </div>
 
+                <!-- Search input-->
+                <div class="col-md-4">
+                  <input id="searchEmail" name="searchEmail" type="search" placeholder="Search Email" class="form-control input-md">
+                </div>
+
+              </div> <!-- End Row -->
+
+              <div class="row rowspace">
+                <!-- Select Basic -->
+                <div class="col-md-2 offset-md-3">
+                  <p>Search Number of Properties</p>
+                </div>
+
+                <!-- Search input-->
+                <div class="col-md-2">
+                  <input id="searchPropertiesFrom" name="searchPropertiesFrom" type="search" placeholder="Start Value" class="form-control input-md">
+                </div>
+
+                <!-- Search input-->
+                <div class="col-md-2">
+                  <input id="searchPropertiesTo" name="searchPropertiesTo" type="search" placeholder="End Value" class="form-control input-md">
+                </div>
+
+              </div> <!-- End Row -->
+
+              
+            <br>
+
+              <div class="row">
+
+                <!-- Submit Button -->
+                <div class="col-md-6 offset-md-5">
+                 <input class="btn btn-primary style-bkg btn-md" type="submit"  width="100%" value="Search Owners">
+               </div>
+
+             </div> 
+
+           </fieldset>
+         </form>
+
+       </div> <!-- End Collapse Example -->
         </div> <!-- End Column -->
       </div> <!-- End Row -->
 
@@ -105,7 +151,27 @@
               </thead>
               <tbody>
               <?php
-              $result = mysqli_query($db, "SELECT * FROM User WHERE UserType = 'OWNER';");
+              $query = "SELECT * FROM User WHERE UserType = 'OWNER'";
+              if (isset($_GET['SEARCH'])) {
+                if (isset($_GET['inputUsername']) && $_GET['inputUsername'] != NULL) {
+                  $query .= " AND Username LIKE '%" . mysqli_real_escape_string($db, $_GET['inputUsername']) . "%'";
+                }
+                if (isset($_GET['searchEmail']) && $_GET['searchEmail'] != NULL) {
+                  $query .= " AND Email LIKE '%" . mysqli_real_escape_string($db, $_GET['searchEmail']) . "%'";
+                }
+                if (isset($_GET['searchPropertiesFrom']) && $_GET['searchPropertiesFrom'] != NULL) {
+                    $visitto = mysqli_real_escape_string($db, (isset($_GET['searchPropertiesTo']) && $_GET['searchPropertiesTo'] != NULL) ? $_GET['searchPropertiesTo'] : $_GET['searchPropertiesFrom']);
+                    if ($_GET['searchPropertiesFrom'] <= 0 && $visitto >= 0) {
+                      $query .= " AND Username NOT IN (SELECT Owner as Username FROM Property GROUP BY Owner HAVING COUNT(Owner) < " . mysqli_real_escape_string($db, $_GET['searchPropertiesFrom']) . " OR COUNT(Owner) > " . $visitto . ")";
+                    } else {
+                      $query .= " AND Username IN (SELECT Owner as Username FROM Property GROUP BY Owner HAVING COUNT(Owner) >= " . mysqli_real_escape_string($db, $_GET['searchPropertiesFrom']) . " AND COUNT(Owner) <= " . $visitto . ")";
+                    }
+                    
+                }
+            }
+            $query .= " ORDER BY Username";
+            //echo "<br>" . $query . "<br>";
+                  $result = mysqli_query($db, $query);
                while ($row = mysqli_fetch_array($result)) {?>
                    <tr>
                        <td class="link-color"><a href=<?php echo "ownerList.php?username=" . $row['Username'];?>>Delete</a></td>

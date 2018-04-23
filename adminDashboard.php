@@ -278,26 +278,31 @@
                 if ($_GET['isPublic'] != 2) {
                    $query .= " AND isPublic = " . $_GET['isPublic'];
                 }
-                if ($_GET['PropertyType'] != 0) {
+                if ($_GET['PropertyType'] != '0') {
                    $query .= " AND PropertyType = '" . $_GET['PropertyType'] . "'";
                 }
                 if (isset($_GET['searchZip']) && $_GET['searchZip'] != NULL) {
                     $query .= " AND Zip = " . mysqli_real_escape_string($db, $_GET['searchZip']);
                 }
                 if (isset($_GET['searchSizeFrom']) && $_GET['searchSizeFrom'] != NULL) {
-                    $sizeto = mysqli_real_escape_string($db, (isset($_GET['searchSizeTo'])) ? $_GET['searchSizeTo'] : $_GET['searchSizeFrom']);
+                    $sizeto = mysqli_real_escape_string($db, (isset($_GET['searchSizeTo']) && $_GET['searchSizeTo'] != NULL) ? $_GET['searchSizeTo'] : $_GET['searchSizeFrom']);
                     $query .= " AND Size >= " . mysqli_real_escape_string($db, $_GET['searchSizeFrom']) . " AND Size <= " . $sizeto;
                 }
                 if (isset($_GET['searchIdFrom']) && $_GET['searchIdFrom'] != NULL) {
-                    $idto = mysqli_real_escape_string($db, (isset($_GET['searchIdTo'])) ? $_GET['searchIdTo'] : $_GET['searchIdFrom']);
+                    $idto = mysqli_real_escape_string($db, (isset($_GET['searchIdTo']) && $_GET['searchIdTo'] != NULL) ? $_GET['searchIdTo'] : $_GET['searchIdFrom']);
                     $query .= " AND ID >= " . mysqli_real_escape_string($db, $_GET['searchIdFrom']) . " AND ID <= " . $idto;
                 }
                 if (isset($_GET['searchVisitsFrom']) && $_GET['searchVisitsFrom'] != NULL) {
-                    $visitto = mysqli_real_escape_string($db, (isset($_GET['searchVisitsTo'])) ? $_GET['searchVisitsTo'] : $_GET['searchVisitFrom']);
-                    $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING COUNT(PropertyID) >= " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " AND COUNT(PropertyID) <= " . $visitto . ")";
+                    $visitto = mysqli_real_escape_string($db, (isset($_GET['searchVisitsTo']) && $_GET['searchVisitsTo'] != NULL) ? $_GET['searchVisitsTo'] : $_GET['searchVisitFrom']);
+                    if ($_GET['searchVisitFrom'] <= 0 && $visitto >= 0) {
+                      $query .= " AND ID NOT IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING COUNT(PropertyID) < " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " OR COUNT(PropertyID) > " . $visitto . ")";
+                    } else {
+                        $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING COUNT(PropertyID) >= " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " AND COUNT(PropertyID) <= " . $visitto . ")";
+                    }
+                    
                 }
                 if (isset($_GET['searchRatingFrom']) && $_GET['searchRatingFrom'] != NULL) {
-                    $ratingto = mysqli_real_escape_string($db, (isset($_GET['searchRatingTo'])) ? $_GET['searchRatingTo'] : $_GET['searchRatingFrom']);
+                    $ratingto = mysqli_real_escape_string($db, (isset($_GET['searchRatingTo']) && $_GET['searchRatingsTo'] != NULL) ? $_GET['searchRatingTo'] : $_GET['searchRatingFrom']);
                     $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING AVG(Rating) >= " . mysqli_real_escape_string($db, $_GET['searchRatingFrom']) . " AND AVG(Rating) <= " . $ratingto . ")";
                 }
             }

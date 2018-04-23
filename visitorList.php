@@ -56,33 +56,80 @@
       <div class ="row">
         <div class = "col-md-12">
 
-          <form class="form-horizontal">
+          <div class="text-center">
+
+           <button class="btn btn-primary style-bkg" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            &#x1f50d Search Table
+          </button>
+
+        </div> 
+
+        <div class="collapse" id="collapseExample">
+          <form class="form-horizontal" action="visitorList.php" method = "GET">
             <fieldset>
 
-              <div class="row">
-
+              <br>
+              <input id="SEARCH" name="SEARCH" value="true" type = "hidden">
+              <div class="row rowspace">
                 <!-- Select Basic -->
-                <div class="col-md-3">
-                  <select id="selectbasic" name="selectbasic" class="form-control">
-                    <option value="1">Search by...</option>
-                    <option value="2">Option two</option>
-                  </select>
+                <div class="col-md-2 offset-md-3">
+                  <p>Search Username</p>
                 </div>
 
                 <!-- Search input-->
-                <div class="col-md-7">
-                  <input id="searchinput" name="searchinput" type="search" placeholder="Search Visitors" class="form-control input-md">
-                </div>
-
-                <!-- Submit Button -->
-                <div class="col-md-2">
-                  <input class="btn btn-primary style-bkg" type="submit" value="Search Visitors">
+                <div class="col-md-4">
+                  <input id="inputUsername" name="inputUsername" type="search" placeholder="Search Username" class="form-control input-md">
                 </div>
 
               </div> <!-- End Row -->
 
-            </fieldset>
-          </form>
+              <div class="row rowspace">
+                <!-- Select Basic -->
+                <div class="col-md-2 offset-md-3">
+                  <p>Search Email</p>
+                </div>
+
+                <!-- Search input-->
+                <div class="col-md-4">
+                  <input id="searchEmail" name="searchEmail" type="search" placeholder="Search Email" class="form-control input-md">
+                </div>
+
+              </div> <!-- End Row -->
+
+              <div class="row rowspace">
+                <!-- Select Basic -->
+                <div class="col-md-2 offset-md-3">
+                  <p>Search Visits</p>
+                </div>
+
+                <!-- Search input-->
+                <div class="col-md-2">
+                  <input id="searchVisitsFrom" name="searchVisitsFrom" type="search" placeholder="Start Value" class="form-control input-md">
+                </div>
+
+                <!-- Search input-->
+                <div class="col-md-2">
+                  <input id="searchVisitsTo" name="searchVisitsTo" type="search" placeholder="End Value" class="form-control input-md">
+                </div>
+
+              </div> <!-- End Row -->
+
+              
+            <br>
+
+              <div class="row">
+
+                <!-- Submit Button -->
+                <div class="col-md-6 offset-md-5">
+                 <input class="btn btn-primary style-bkg btn-md" type="submit"  width="100%" value="Search Visitors">
+               </div>
+
+             </div> 
+
+           </fieldset>
+         </form>
+
+       </div> <!-- End Collapse Example -->
 
         </div> <!-- End Column -->
       </div> <!-- End Row -->
@@ -105,7 +152,27 @@
               </thead>
               <tbody>
                   <?php
-                  $result = mysqli_query($db, "SELECT * FROM User WHERE UserType = 'VISITOR';");
+                  $query = "SELECT * FROM User WHERE UserType = 'VISITOR'";
+                if (isset($_GET['SEARCH'])) {
+                if (isset($_GET['inputUsername']) && $_GET['inputUsername'] != NULL) {
+                  $query .= " AND Username LIKE '%" . mysqli_real_escape_string($db, $_GET['inputUsername']) . "%'";
+                }
+                if (isset($_GET['searchEmail']) && $_GET['searchEmail'] != NULL) {
+                  $query .= " AND Email LIKE '%" . mysqli_real_escape_string($db, $_GET['searchEmail']) . "%'";
+                }
+                if (isset($_GET['searchVisitsFrom']) && $_GET['searchVisitsFrom'] != NULL) {
+                    $visitto = mysqli_real_escape_string($db, (isset($_GET['searchVisitsTo']) && $_GET['searchVisitsTo'] != NULL) ? $_GET['searchVisitsTo'] : $_GET['searchVisitFrom']);
+                    if ($_GET['searchVisitFrom'] <= 0 && $visitto >= 0) {
+                      $query .= " AND Username NOT IN (SELECT Username FROM Visit GROUP BY Username HAVING COUNT(Username) < " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " OR COUNT(Username) > " . $visitto . ")";
+                    } else {
+                      $query .= " AND Username IN (SELECT Username FROM Visit GROUP BY Username HAVING COUNT(Username) >= " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " AND COUNT(Username) <= " . $visitto . ")";
+                    }
+                    
+                }
+            }
+            $query .= " ORDER BY Username";
+            //echo "<br>" . $query . "<br>";
+                  $result = mysqli_query($db, $query);
                    while ($row = mysqli_fetch_array($result)) {?>
                        <tr>
                            <td class="link-color"><a href=<?php echo "visitorList.php?deleteUser=" . $row['Username'];?>>Delete</a></td>

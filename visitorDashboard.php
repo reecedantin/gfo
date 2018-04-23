@@ -102,21 +102,7 @@ if($_SESSION['user_type'] != "VISITOR") {
                   <input id="searchZip" name="searchZip" type="search" placeholder="Search Zip" class="form-control input-md">
                 </div>
 
-              </div> <!-- End Row -->  
-
-
-              <div class="row rowspace">
-                <!-- Select Basic -->
-                <div class="col-md-2 offset-md-3">
-                  <p>Search Approved By</p>
-                </div>
-
-                <!-- Search input-->
-                <div class="col-md-4">
-                  <input id="searchApprovedBy" name="searchApprovedBy" type="search" placeholder="Search Approved By" class="form-control input-md">
-                </div>
-
-              </div> <!-- End Row -->     
+              </div> <!-- End Row -->       
 
               <div class="row rowspace">
                 <!-- Select Basic -->
@@ -255,7 +241,6 @@ if($_SESSION['user_type'] != "VISITOR") {
               <th scope="col">Public</th>
               <th scope="col">Commercial</th>
               <th scope="col">&nbsp ID</th>
-              <th scope="col">Approved By</th>
               <th scope="col">Visits</th>
               <th scope="col">Rating</th>
             </tr>
@@ -277,36 +262,39 @@ if($_SESSION['user_type'] != "VISITOR") {
                 if (isset($_GET['inputStreet']) && $_GET['inputStreet'] != NULL) {
                   $query .= " AND Street LIKE '%" . mysqli_real_escape_string($db, $_GET['inputStreet']) . "%'";
                 }
-                if (isset($_GET['searchApprovedBy']) && $_GET['searchApprovedBy'] != NULL) {
-                  $query .= " AND ApprovedBy LIKE '%" . mysqli_real_escape_string($db, $_GET['searchApprovedBy']) . "%'";
-                }
                 if ($_GET['isCommercial'] != 2) {
                    $query .= " AND isCommercial = " . $_GET['isCommercial'];
                 }
                 if ($_GET['isPublic'] != 2) {
                    $query .= " AND isPublic = " . $_GET['isPublic'];
                 }
-                if ($_GET['PropertyType'] != 0) {
+                if ($_GET['PropertyType'] != '0') {
                    $query .= " AND PropertyType = '" . $_GET['PropertyType'] . "'";
                 }
                 if (isset($_GET['searchZip']) && $_GET['searchZip'] != NULL) {
                     $query .= " AND Zip = " . mysqli_real_escape_string($db, $_GET['searchZip']);
                 }
                 if (isset($_GET['searchSizeFrom']) && $_GET['searchSizeFrom'] != NULL) {
-                    $sizeto = mysqli_real_escape_string($db, (isset($_GET['searchSizeTo'])) ? $_GET['searchSizeTo'] : $_GET['searchSizeFrom']);
+                    $sizeto = mysqli_real_escape_string($db, (isset($_GET['searchSizeTo']) && $_GET['searchSizeTo'] != NULL) ? $_GET['searchSizeTo'] : $_GET['searchSizeFrom']);
                     $query .= " AND Size >= " . mysqli_real_escape_string($db, $_GET['searchSizeFrom']) . " AND Size <= " . $sizeto;
                 }
                 if (isset($_GET['searchIdFrom']) && $_GET['searchIdFrom'] != NULL) {
-                    $idto = mysqli_real_escape_string($db, (isset($_GET['searchIdTo'])) ? $_GET['searchIdTo'] : $_GET['searchIdFrom']);
+                    $idto = mysqli_real_escape_string($db, (isset($_GET['searchIdTo']) && $_GET['searchIdTo'] != NULL) ? $_GET['searchIdTo'] : $_GET['searchIdFrom']);
                     $query .= " AND ID >= " . mysqli_real_escape_string($db, $_GET['searchIdFrom']) . " AND ID <= " . $idto;
                 }
                 if (isset($_GET['searchVisitsFrom']) && $_GET['searchVisitsFrom'] != NULL) {
-                    $visitto = mysqli_real_escape_string($db, (isset($_GET['searchVisitsTo'])) ? $_GET['searchVisitsTo'] : $_GET['searchVisitFrom']);
-                    $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING COUNT(PropertyID) >= " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " AND COUNT(PropertyID) <= " . $visitto . ")";
+                    $visitto = mysqli_real_escape_string($db, (isset($_GET['searchVisitsTo']) && $_GET['searchVisitsTo'] != NULL) ? $_GET['searchVisitsTo'] : $_GET['searchVisitFrom']);
+                    if ($_GET['searchVisitFrom'] <= 0 && $visitto >= 0) {
+                      $query .= " AND ID NOT IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING COUNT(PropertyID) < " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " OR COUNT(PropertyID) > " . $visitto . ")";
+                    } else {
+                        $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING COUNT(PropertyID) >= " . mysqli_real_escape_string($db, $_GET['searchVisitsFrom']) . " AND COUNT(PropertyID) <= " . $visitto . ")";
+                    }
+                    
                 }
                 if (isset($_GET['searchRatingFrom']) && $_GET['searchRatingFrom'] != NULL) {
-                    $ratingto = mysqli_real_escape_string($db, (isset($_GET['searchRatingTo'])) ? $_GET['searchRatingTo'] : $_GET['searchRatingFrom']);
-                    $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING AVG(Rating) >= " . mysqli_real_escape_string($db, $_GET['searchRatingFrom']) . " AND AVG(Rating) <= " . $ratingto . ")";
+                    $ratingto = mysqli_real_escape_string($db, (isset($_GET['searchRatingTo']) && $_GET['searchRatingsTo'] != NULL) ? $_GET['searchRatingTo'] : $_GET['searchRatingFrom']);
+                        $query .= " AND ID IN (SELECT PropertyID as ID FROM Visit GROUP BY PropertyID HAVING AVG(Rating) >= " . mysqli_real_escape_string($db, $_GET['searchRatingFrom']) . " AND AVG(Rating) <= " . $ratingto . ")";
+
                 }
             }
             $query .= " ORDER BY Name";
@@ -333,11 +321,6 @@ if($_SESSION['user_type'] != "VISITOR") {
           } ?>
         </td>
         <td><?php echo $row['ID'];?></td>
-        <td><?php if ($row['ApprovedBy'] == "NULL") {
-          echo "Not Approved";
-        } else {
-          echo $row['ApprovedBy'];
-        } ?>
       </td>
       <td><?php
       $visitsql = "SELECT COUNT(*),  AVG(Rating) FROM Visit WHERE PropertyID = '" . $row['ID'] . "'";
